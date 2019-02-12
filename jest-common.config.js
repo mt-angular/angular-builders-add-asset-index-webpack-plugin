@@ -13,5 +13,6 @@ module.exports = {
         "js",
         "json"
     ],
-    testEnvironment: "./jest-custom-environment"
+    testEnvironment: "./jest-custom-environment",
+    automock: false
 };

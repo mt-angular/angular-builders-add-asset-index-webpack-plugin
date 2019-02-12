@@ -14,6 +14,7 @@ import { Path } from '@angular-devkit/core';
 import { compilation } from 'webpack';
 type Compilation = compilation.Compilation;
 
+export type LocationInIndex = 'head' | 'body';
 
 export class AssetOption {
     filepath: string;
@@ -21,7 +22,7 @@ export class AssetOption {
     deployUrl?: string = ''; // to overwrite BuilderParametersOption.deployUrl
     sri?: boolean; // to overwrite BuilderParametersOption.subresourceIntegrity
     attributes?: { [atrributeName: string]: string } = {};
-    place: 'head' | 'body' = 'head';
+    place: LocationInIndex = 'head';
 }
 
 
@@ -66,7 +67,7 @@ export class Asset {
         // this.assetResolved.push({ asset/* , basename */, resolvedPath });
     }
 
-
+    // from https://github.com/jantimon/html-webpack-plugin/blob/master/index.js
     private addFileToWebpackAssets() {
         // compiler: Compiler
         // const filenameWithContext = path.resolve(compiler.options.context, filepath);

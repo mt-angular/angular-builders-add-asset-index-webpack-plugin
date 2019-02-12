@@ -1,6 +1,6 @@
-import { BuildOptions } from '@angular-devkit/build-angular/src/angular-cli-files/models/build-options';
-import { IndexHtmlWebpackPlugin, IndexHtmlWebpackPluginOptions } from '@angular-devkit/build-angular/src/angular-cli-files/plugins/index-html-webpack-plugin';
-import { BuilderParametersOptions, BuilderParameters, NormalizedCustomWebpackBrowserBuildSchema } from '../linked_modules/@mt/custom-webpack-builder/custom-webpack-builder';
+// import { BuildOptions } from '@angular-devkit/build-angular/src/angular-cli-files/models/build-options';
+import { IndexHtmlWebpackPluginOptions } from '@angular-devkit/build-angular/src/angular-cli-files/plugins/index-html-webpack-plugin';
+import { BuilderParameters, NormalizedCustomWebpackBrowserBuildSchema } from '../linked_modules/@mt/custom-webpack-builder/custom-webpack-builder';
 import * as path from 'path';
 import * as globby from 'globby';
 
@@ -60,10 +60,11 @@ export class AddAssetIndexPlugin {
 
 
     constructor(assetsOption: AssetOption | AssetOption[] = [], builderParameters: BuilderParameters) {
+        // '@angular-devkit/build-angular/src/angular-cli-files/plugins/index-html-webpack-plugin'
         // new IndexHtmlWebpackPlugin(); if one day we need. Like we could overwrite
         this.root = builderParameters.root;
         this.option = this.getAngularOptions(builderParameters);// Object.assign(new Option(), option);
-        this.assetsOption = isArray<AssetOption>(this.assetsOption) ? this.assetsOption : [this.assetsOption];
+        this.assetsOption = isArray<AssetOption>(assetsOption) ? assetsOption : [assetsOption];
     }
 
 

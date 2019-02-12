@@ -1,33 +1,39 @@
-import * as crypto from 'crypto';
 import * as parse5 from 'parse5';
 import * as defaultTreeAdapter from 'parse5/lib/tree-adapters/default';
 import { RawSource, ReplaceSource } from 'webpack-sources';
 import { compilation } from 'webpack';
 import { AssetResolved } from './add-asset-index-plugin';
-import { isDefined, isUndefined } from '../linked_modules/@mt/util';
+import { isDefined, isUndefined } from '../linked_modules/@mt/util/is';
+import { LocationInIndex } from './asset';
+import { hash } from './common';
 
 type Compilation = compilation.Compilation;
 
-export interface IndexWriterOption {
-    indexInputPath: string;
-    indexOutputPath: string;
+export class FragmentData {
+    location: number = undefined;
+    fragment: DocumentFragment = undefined;
+}
+
+export class IndexWriterOption {
+    indexInputPath: string = 'src/index.html';
+    indexOutputPath: string = 'index.html';
 }
 
 export class IndexWriter {
     // partially copied from @angular_devkit/build_angular/src/angular-cli-files/plugins/index-html-webpack-plugin.ts
     // updated from version 4 to 5 for parse5
-
-    private headInsertionPoint: number;
-    private bodyInsertionPoint: number;
+    public option: IndexWriterOption;
+    private head = new FragmentData();
+    private body = new FragmentData();
     private indexSource: ReplaceSource;
-    private assetHeadFragment: DocumentFragment;
-    private assetBodyFragment: DocumentFragment;
+    private initDone: boolean = false;
 
+    constructor(public compilation: Compilation, option: IndexWriterOption) {
+        this.option = Object.assign(new IndexWriterOption(), option);
+    }
 
-    constructor(public compilation: Compilation, public option: IndexWriterOption) { }
-
-    async initReadIndex() {
-        const indexContent = await this.readFile(); // option.input = index.html or something else
+    public async init() {
+        const indexContent = await this.readFile();
 
         const document = parse5.parse(indexContent, { treeAdapter: defaultTreeAdapter, sourceCodeLocationInfo: true }) as parse5.DefaultTreeDocument;
 
@@ -60,22 +66,22 @@ export class IndexWriter {
 
 
         const headElementLocation = headElement.sourceCodeLocation;
-        if (isDefined(headElementLocation) && headElementLocation.endTag) {
-            this.headInsertionPoint = headElementLocation.endTag.startOffset;
+        if (headElementLocation && headElementLocation.endTag) {
+            this.head.location = headElementLocation.endTag.startOffset;
         } else {
             // Less accurate fallback
             // parse5 4.x does not provide locations if malformed html is present
-            this.headInsertionPoint = indexContent.indexOf('</head>');
+            this.head.location = indexContent.indexOf('</head>');
         }
 
 
-        const bodyElementLocation = headElement.sourceCodeLocation;
-        if (isDefined(bodyElementLocation) && bodyElementLocation.endTag) {
-            this.bodyInsertionPoint = bodyElementLocation.endTag.startOffset;
+        const bodyElementLocation = bodyElement.sourceCodeLocation;
+        if (bodyElementLocation && bodyElementLocation.endTag) {
+            this.body.location = bodyElementLocation.endTag.startOffset;
         } else {
             // Less accurate fallback
             // parse5 4.x does not provide locations if malformed html is present
-            this.bodyInsertionPoint = indexContent.indexOf('</body>');
+            this.body.location = indexContent.indexOf('</body>');
         }
 
 
@@ -84,62 +90,32 @@ export class IndexWriter {
     }
 
 
-    async writeInIndex(assetResolved: AssetResolved[]) {
-
-        const assetHeadElements = { exist: false, fragment: defaultTreeAdapter.createDocumentFragment() };
-        const assetBodyElements = { exist: false, fragment: defaultTreeAdapter.createDocumentFragment() };
+    public async writeInIndex(assetResolved: AssetResolved[]) {
+        if (!this.initDone) {
+            this.initDone = true;
+            await this.init();
+        }
 
         for (const resolved of assetResolved) {
-            const { resolvedPath } = resolved;
-            const { sri, attributes, place } = resolved.asset.option;
 
-            const attrs = [
-                { name: 'rel', value: 'preload' },
-                { name: 'href', value: resolvedPath },
-            ];
+            const { place } = resolved.asset.option;
 
-            if (sri) {
-                const content = this.compilation.assets[resolvedPath].source();
-                attrs.push(...this.generateSriAttributes(content));
-            }
-
-            if (attributes) {
-                for (const [name, value] of Object.entries(attributes))
-                    attrs.push({ name, value });
-            }
-
-            const element = defaultTreeAdapter.createElement('link', undefined, attrs);
-            if (place === 'head')
-                assetHeadElements.exist = true && defaultTreeAdapter.appendChild(assetHeadElements.fragment, element);
-            else
-                assetBodyElements.exist = true && defaultTreeAdapter.appendChild(assetBodyElements.fragment, element);
+            const link = this.createLink(resolved);
+            this.appendLinkToFragment(place, link);
         }
 
-        if (assetHeadElements.exist) {
-            this.indexSource.insert(
-                this.headInsertionPoint,
-                parse5.serialize(assetHeadElements.fragment, { treeAdapter: defaultTreeAdapter }),
-            );
-        }
-
-        if (assetBodyElements.exist) {
-            this.indexSource.insert(
-                this.bodyInsertionPoint,
-                parse5.serialize(assetBodyElements.fragment, { treeAdapter: defaultTreeAdapter }),
-            );
-        }
+        this.insertFragmentsInIndex();
 
         // Add to compilation assets
-        this.compilation.assets[this.option.indexOutputPath || 'index.html'] = this.indexSource;
+        this.compilation.assets[this.option.indexOutputPath] = this.indexSource;
     }
 
 
-    private createLink(assetResolved: AssetResolved) {
+    private createLink(assetResolved: AssetResolved): parse5.DefaultTreeElement {
         const { resolvedPath } = assetResolved;
-        const { sri, attributes, place } = assetResolved.asset.option;
+        const { sri, attributes } = assetResolved.asset.option;
 
         const attrs = [
-            { name: 'rel', value: 'preload' },
             { name: 'href', value: resolvedPath },
         ];
 
@@ -149,28 +125,43 @@ export class IndexWriter {
         }
 
         if (attributes) {
+            // can be { name: 'rel', value: 'preload' }, { name: 'as', value: 'font' },
             for (const [name, value] of Object.entries(attributes))
                 attrs.push({ name, value });
         }
 
         const link: parse5.DefaultTreeElement = defaultTreeAdapter.createElement('link', undefined, attrs);
-        this.appendLinkToIndex(assetResolved, link);
-    }
-
-    private appendLinkToIndex(assetResolved: AssetResolved, link: parse5.DefaultTreeElement) {
-        const place = assetResolved.asset.option.place;
-        let fragment = place === 'head' ? this.assetHeadFragment : this.assetBodyFragment;
-
-        if (isUndefined(fragment))
-            fragment = defaultTreeAdapter.createDocumentFragment();
-
-
-        defaultTreeAdapter.appendChild(fragment, link);
+        return link;
     }
 
 
+    private appendLinkToFragment(place: LocationInIndex, link: parse5.DefaultTreeElement) {
 
-    private readFile(): Promise<string> {
+        const fragmentData = place === 'head' ? this.head : this.body;
+
+        if (isUndefined(fragmentData.fragment))
+            fragmentData.fragment = defaultTreeAdapter.createDocumentFragment();
+
+
+        defaultTreeAdapter.appendChild(fragmentData.fragment, link);
+    }
+
+
+    private insertFragmentsInIndex() {
+
+        for (const framgentData of [this.head, this.body]) {
+            if (isDefined(framgentData.fragment)) {
+                this.indexSource.insert(
+                    framgentData.location,
+                    parse5.serialize(framgentData.fragment, { treeAdapter: defaultTreeAdapter }),
+                );
+            }
+        }
+
+    }
+
+
+    private async readFile(): Promise<string> {
         const { indexInputPath } = this.option;
 
         return new Promise<string>((resolve, reject) => {
@@ -198,14 +189,11 @@ export class IndexWriter {
     }
 
 
-    private generateSriAttributes(content: string) {
-        const algo = 'sha384';
-        const hash = crypto.createHash(algo)
-            .update(content, 'utf8')
-            .digest('base64');
+    private generateSriAttributes(content: string, algo: string = 'sha384'): { name: string; value: string }[] {
+        const contentHash = hash(content, { algo });
 
         return [
-            { name: 'integrity', value: `${algo}-${hash}` },
+            { name: 'integrity', value: `${algo}-${contentHash}` },
             { name: 'crossorigin', value: 'anonymous' },
         ];
     }
