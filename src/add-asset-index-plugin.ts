@@ -21,9 +21,6 @@ import { pluginName } from './common';
 type Compilation = compilation.Compilation;
 
 
-
-
-
 interface BuilderParametersOption {
     index: NormalizedCustomWebpackBrowserBuildSchema['index'];
     baseHref: NormalizedCustomWebpackBrowserBuildSchema['baseHref'];
@@ -49,7 +46,7 @@ export interface AssetResolved {
 }
 
 export class AddAssetIndexPlugin {
-    private assetResolved: AssetResolved[] = [];
+    private assetsResolved: AssetResolved[] = [];
     private assetsOption: AssetOption[];
     private root: Path;
     private option: AddAssetIndexPluginOptions;
@@ -122,7 +119,7 @@ export class AddAssetIndexPlugin {
             this.initAssets();
 
             await this.addAllAssetsToCompilation();
-            await this.indexWriter.writeInIndex(this.assetResolved);
+            await this.indexWriter.writeInIndex(this.assetsResolved);
         });
     }
 
@@ -130,7 +127,7 @@ export class AddAssetIndexPlugin {
 
         for (const asset of this.assets) {
             const resolvedPath = await asset.addFileToAssets();
-            this.assetResolved.push({ asset, resolvedPath });
+            this.assetsResolved.push({ asset, resolvedPath });
         }
     }
 

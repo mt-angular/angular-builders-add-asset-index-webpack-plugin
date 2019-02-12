@@ -5,7 +5,7 @@ import { compilation } from 'webpack';
 import { AssetResolved } from './add-asset-index-plugin';
 import { isDefined, isUndefined } from '../linked_modules/@mt/util/is';
 import { LocationInIndex } from './asset';
-import { hash } from './common';
+import { hash, HashOption } from './common';
 
 type Compilation = compilation.Compilation;
 
@@ -189,8 +189,11 @@ export class IndexWriter {
     }
 
 
-    private generateSriAttributes(content: string, algo: string = 'sha384'): { name: string; value: string }[] {
-        const contentHash = hash(content, { algo });
+    private generateSriAttributes(content: string, hashOption?: HashOption): { name: string; value: string }[] {
+        const hashOpt = Object.assign({ algo: 'sha384', digest: 'base64' }, hashOption);
+        const contentHash = hash(content, hashOpt);
+
+        const { algo } = hashOpt;
 
         return [
             { name: 'integrity', value: `${algo}-${contentHash}` },

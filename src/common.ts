@@ -2,12 +2,17 @@ import * as crypto from 'crypto';
 
 export const pluginName = 'AddAssetIndexPlugin';
 
-export function hash(content: string, option?: { algo?: string, digest?: crypto.HexBase64Latin1Encoding }) {
-    const { algo, digest } = Object.assign({ algo: 'sha384', digest: 'base64' }, option);
 
-    const hash = crypto.createHash(algo)
-        .update(content, 'utf8')
-        .digest(digest);
+export class HashOption {
+    algo: string = 'sha384';
+    digest: crypto.HexBase64Latin1Encoding = 'base64';
+}
 
-    return hash;
+export function hash(content: string | Buffer, option?: HashOption): string {
+    const { algo, digest } = Object.assign(new HashOption(), option);
+
+    const hasher = crypto.createHash(algo);
+    const hash = typeof content === 'string' ? hasher.update(content, 'utf8') : hasher.update(content);
+
+    return hash.digest(digest);
 }

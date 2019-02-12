@@ -1,4 +1,4 @@
-import { pluginName } from './common';
+import { pluginName, hash } from './common';
 
 import { assignDefaultOption } from '../linked_modules/@mt/util';
 
@@ -91,12 +91,12 @@ export class Asset {
             .then(results => {
 
                 const hashClipped = hash ? this.getSourceHash(results.source).substr(0, 20) : '';
-                const rootFilePathDiffDir = filepath.startsWith('/') ? path.relative(this.root, filepath) : path.dirname(filepath);
+                const filepathRelDirFromRoot = filepath.startsWith('/') ? path.relative(this.root, filepath) : path.dirname(filepath);
                 const basename = path.basename(filepath);
                 const extWithPoint = path.extname(basename);
                 const filename = basename.split(extWithPoint)[0];
 
-                const resolvedPath = path.join(deployUrl, rootFilePathDiffDir, `${filename}.${hashClipped}${extWithPoint}`);
+                const resolvedPath = path.join(deployUrl, filepathRelDirFromRoot, `${filename}.${hashClipped}${extWithPoint}`);
 
                 this.compilation.assets[resolvedPath] = {
                     source: () => results.source,
@@ -108,9 +108,6 @@ export class Asset {
     }
 
     getSourceHash(source: Buffer) {
-        const algo = 'sha384';
-        const hash = crypto.createHash(algo);
-        hash.update(source);
-        return hash.digest('hex');
+        return hash(source, { algo: 'sha384', digest: 'hex' });
     }
 }
