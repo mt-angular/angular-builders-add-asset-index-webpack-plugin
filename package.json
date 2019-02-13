@@ -7,7 +7,8 @@
         "postbuild": "yarn test && yarn e2e",
         "build": "tsc",
         "test": "jest --config jest-ut.config.js ",
-        "e2e": "jest --config jest-e2e.config.js"
+        "e2e": "jest --config jest-e2e.config.js",
+        "set-follow-symlinks-watcher": "sed -i 's/followSymlinks: false/followSymlinks: true/g' node_modules/watchpack/lib/DirectoryWatcher.js"
     },
     "devDependencies": {
         "@angular-devkit/build-angular": "^0.13.0",
@@ -23,5 +24,8 @@
         "ts-util-is": "^1.1.3",
         "webpack": "^4.29.0",
         "webpack-cli": "^3.2.1"
+    },
+    "dependencies": {
+        "applicationinsights": "^1.1.0"
     }
 }

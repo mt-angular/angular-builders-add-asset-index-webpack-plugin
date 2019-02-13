@@ -4,8 +4,8 @@ export const pluginName = 'AddAssetIndexPlugin';
 
 
 export class HashOption {
-    algo: string = 'sha384';
-    digest: crypto.HexBase64Latin1Encoding = 'base64';
+    algo?: string = 'sha384';
+    digest?: crypto.HexBase64Latin1Encoding = 'base64';
 }
 
 export function hash(content: string | Buffer, option?: HashOption): string {

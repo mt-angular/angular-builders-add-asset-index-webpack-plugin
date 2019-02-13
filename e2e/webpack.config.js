@@ -1,6 +1,5 @@
-const { AddAssetIndexPlugin } = require('../dist/add-asset-index-plugin');
+const { AddAssetIndexPlugin } = require('../dist/src/add-asset-index-plugin');
 const path = require('path');
-
 
 const webpackConfig = {
     entry: path.resolve('src/index.js'),
@@ -20,15 +19,17 @@ const webpackConfig = {
          ],
      }, */
     plugins: [
-        new AddAssetIndexPlugin([{ filepath: 'assets/font/**/*.woff2', as: 'font', hash: true }], {
+        new AddAssetIndexPlugin([{ filepath: 'assets/font/**/*.woff2', as: 'font' /* , hash: true  */ }], {
             root: __dirname,
             options: {
-                index: '/home/milottit/Projects/IFA/webpack/test/src/index.html',
+                index: path.join(__dirname, 'src/index.html'),
                 subresourceIntegrity: false,
                 baseHref: undefined,
                 deployUrl: undefined
+            },
+            webpackConfiguration: {
+                mode: 'development' // 'production'
             }
-
         })
 
         // new AddAssetIndexPlugin([{ filepath: 'assets/font/**/*.woff2', attributes: { as: 'font' } }], { indexName: path.resolve('src/index.html') })

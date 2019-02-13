@@ -1,9 +1,8 @@
 import { pluginName, hash } from './common';
 
-import { assignDefaultOption } from '../linked_modules/@mt/util';
+import { assignDefaultOption } from '../linked_modules/@mt/util/assign';
 
 import * as path from 'path';
-import * as crypto from 'crypto';
 import * as fs from 'fs';
 
 import { promisify } from 'util';
@@ -17,36 +16,31 @@ type Compilation = compilation.Compilation;
 export type LocationInIndex = 'head' | 'body';
 
 export class AssetOption {
-    filepath: string;
-    hash?: boolean = true;
-    deployUrl?: string = ''; // to overwrite BuilderParametersOption.deployUrl
-    sri?: boolean; // to overwrite BuilderParametersOption.subresourceIntegrity
-    attributes?: { [atrributeName: string]: string } = {};
-    place: LocationInIndex = 'head';
+	filepath: string;
+	deployUrl?: string = ''; // to overwrite BuilderParametersOption.deployUrl
+	sri?: boolean; // to overwrite BuilderParametersOption.subresourceIntegrity
+	attributes?: { [atrributeName: string]: string } = {};
+	hash?: boolean = false;
+	place?: LocationInIndex = 'head';
 }
 
-
-
 export class Asset {
-    public option: AssetOption;
+	public option: AssetOption;
 
-    constructor(public compilation: Compilation, public root: Path, option: AssetOption) {
-        this.option = assignDefaultOption(new AssetOption(), option);
-    }
+	constructor(public compilation: Compilation, public root: Path, option: AssetOption) {
+		this.option = assignDefaultOption(new AssetOption(), option);
+	}
 
+	async addFileToAssets(): Promise<string> {
+		const { filepath } = this.option;
 
+		if (!filepath) {
+			const error = new Error('No filepath defined');
+			this.compilation.errors.push(error);
+			throw error;
+		}
 
-    async addFileToAssets(): Promise<string> {
-
-        const { filepath } = this.option;
-
-        if (!filepath) {
-            const error = new Error('No filepath defined');
-            this.compilation.errors.push(error);
-            throw error;
-        }
-
-        /*
+		/*
             const fileFilters = Array.isArray(files) ? files : [files];
             // every file entry can be a glob
 
@@ -61,53 +55,57 @@ export class Asset {
             }
          */
 
+		const resolvedPath = await this.addFileToWebpackAssets();
+		return resolvedPath;
+		// this.assetResolved.push({ asset/* , basename */, resolvedPath });
+	}
 
-        const resolvedPath = await this.addFileToWebpackAssets();
-        return resolvedPath;
-        // this.assetResolved.push({ asset/* , basename */, resolvedPath });
-    }
+	// from https://github.com/jantimon/html-webpack-plugin/blob/master/index.js
+	private async addFileToWebpackAssets() {
+		// compiler: Compiler
+		// const filenameWithContext = path.resolve(compiler.options.context, filepath);
+		// here filepath is already an absolute path
+		// line  path.resolve(root, buildOptions.index) in @angular_devkit/build_angular/src/angular-cli-files/models/webpack-configs/browser.ts
 
-    // from https://github.com/jantimon/html-webpack-plugin/blob/master/index.js
-    private addFileToWebpackAssets() {
-        // compiler: Compiler
-        // const filenameWithContext = path.resolve(compiler.options.context, filepath);
-        // here filepath is already an absolute path
-        // line  path.resolve(root, buildOptions.index) in @angular_devkit/build_angular/src/angular-cli-files/models/webpack-configs/browser.ts
+		const { filepath, hash, deployUrl = '' } = this.option;
 
-        const { filepath, hash, deployUrl } = this.option;
-        // const deployUrl = asset.deployUrl || this.option.deployUrl || '';
+		return Promise.all([ Asset.statFile(filepath), Asset.readFile(filepath) ])
+			.then(([ stats, source ]) => {
+				return {
+					stats,
+					source
+				};
+			})
+			.catch(() => Promise.reject(new Error(pluginName + ': could not load file ' + filepath)))
+			.then(({ stats, source }) => {
+				const hashClipped = hash ? '.' + this.getSourceHash(source) : '';
+				const filepathRelDirFromRoot = filepath.startsWith('/')
+					? path.relative(this.root, path.dirname(filepath))
+					: path.dirname(filepath);
+				const basename = path.basename(filepath);
+				const ext = path.extname(basename); // ext includes the dot
+				const filename = basename.split(ext)[0];
 
-        return Promise.all([
-            fsStatAsync(filepath),
-            fsReadFileAsync(filepath)
-        ])
-            .then(([stats, source]) => {
-                return {
-                    stats,
-                    source
-                };
-            })
-            .catch(() => Promise.reject(new Error(pluginName + ': could not load file ' + filepath)))
-            .then(results => {
+				const resolvedPath = path.join(deployUrl, filepathRelDirFromRoot, `${filename}${hashClipped}${ext}`);
 
-                const hashClipped = hash ? this.getSourceHash(results.source).substr(0, 20) : '';
-                const filepathRelDirFromRoot = filepath.startsWith('/') ? path.relative(this.root, filepath) : path.dirname(filepath);
-                const basename = path.basename(filepath);
-                const extWithPoint = path.extname(basename);
-                const filename = basename.split(extWithPoint)[0];
+				this.compilation.assets[resolvedPath] = {
+					source: () => source,
+					size: () => stats.size
+				};
 
-                const resolvedPath = path.join(deployUrl, filepathRelDirFromRoot, `${filename}.${hashClipped}${extWithPoint}`);
+				return resolvedPath;
+			});
+	}
 
-                this.compilation.assets[resolvedPath] = {
-                    source: () => results.source,
-                    size: () => results.stats.size
-                };
+	private getSourceHash(source: Buffer) {
+		return hash(source, { algo: 'sha384', digest: 'hex' }).substr(0, 20);
+	}
 
-                return resolvedPath;
-            });
-    }
+	static async statFile(filepath: string) {
+		return fsStatAsync(filepath);
+	}
 
-    getSourceHash(source: Buffer) {
-        return hash(source, { algo: 'sha384', digest: 'hex' });
-    }
+	static async readFile(filepath: string) {
+		return fsReadFileAsync(filepath);
+	}
 }
