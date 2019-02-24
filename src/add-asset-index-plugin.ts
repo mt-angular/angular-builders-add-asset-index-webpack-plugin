@@ -136,25 +136,25 @@ export class AddAssetIndexPlugin {
 
     async addAllAssetsToCompilation(): Promise<AssetResolved[]> {
 
-        /* const resolved$ = this.assets.map(asset => {
-            return asset.addFileToAssets().then(resolvedPaths => ({ asset, resolvedPaths }));
-        }); */
-
-
         const assetsResolved: AssetResolved[] = [];
 
-        /* await Promise.all(resolved$).then(resolved => {
+
+        const resolved$ = this.assets.map(asset => {
+            return asset.addFileToAssets().then(resolvedPaths => ({ asset, resolvedPaths }));
+        });
+
+        await Promise.all(resolved$).then(resolved => {
             for (const { asset, resolvedPaths } of resolved) {
 
                 for (const resolvedPath of resolvedPaths)
                     assetsResolved.push({ asset, resolvedPath });
             }
-        }); */
-        for (const asset of this.assets) {
+        });
+        /* for (const asset of this.assets) {
             const resolvedPaths = await asset.addFileToAssets();
             for (const resolvedPath of resolvedPaths)
                 assetsResolved.push({ asset, resolvedPath });
-        }
+        } */
 
         return assetsResolved;
     }
