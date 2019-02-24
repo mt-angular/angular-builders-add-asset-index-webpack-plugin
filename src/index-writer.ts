@@ -3,7 +3,7 @@ import * as defaultTreeAdapter from 'parse5/lib/tree-adapters/default';
 import { RawSource, ReplaceSource } from 'webpack-sources';
 import { compilation } from 'webpack';
 import { AssetResolved } from './add-asset-index-plugin';
-import { isDefined, isUndefined } from '../linked_modules/@mt/util/is';
+import { isDefined, isUndefined, isNull, isNil } from '../linked_modules/@mt/util/is';
 import { LocationInIndex } from './asset';
 import { hash, HashOption } from './common';
 
@@ -37,8 +37,8 @@ export class IndexWriter {
 
         const document = parse5.parse(indexContent, { treeAdapter: defaultTreeAdapter, sourceCodeLocationInfo: true }) as parse5.DefaultTreeDocument;
 
-        let headElement: parse5.DefaultTreeElement
-        let bodyElement: parse5.DefaultTreeElement
+        let headElement: parse5.DefaultTreeElement = undefined;
+        let bodyElement: parse5.DefaultTreeElement = undefined;
 
         const childNodes = document.childNodes as parse5.DefaultTreeElement[];
 
@@ -58,31 +58,43 @@ export class IndexWriter {
         }
 
 
-        if (!headElement || !bodyElement) {
-            const error = new Error('Missing head and/or body elements');
-            this.compilation.errors.push(error);
-            throw error;
+
+
+        for (const { location, tagName } of [
+            // sourceCodeLocation is null if indexContent does not contain the tag (head/body). So it is better
+            // to return null to be compliant
+            { location: isDefined(headElement) ? headElement.sourceCodeLocation : null, tagName: 'head' },
+            { location: isDefined(bodyElement) ? bodyElement.sourceCodeLocation : null, tagName: 'body' },
+        ]) {
+            // I do not know if endTag is null or undefined if it does not exist
+            if (!isNull(location) && !isNil(location.endTag)) {
+                this[ tagName ].location = location.endTag.startOffset;
+            } else {
+                // Less accurate fallback
+                // parse5 4.x does not provide locations if malformed html is present
+                const index = indexContent.indexOf(`</${tagName}>`);
+                this[ tagName ].location = index !== -1 ? index : undefined;
+            }
         }
 
-
-        const headElementLocation = headElement.sourceCodeLocation;
-        if (headElementLocation && headElementLocation.endTag) {
-            this.head.location = headElementLocation.endTag.startOffset;
-        } else {
-            // Less accurate fallback
-            // parse5 4.x does not provide locations if malformed html is present
-            this.head.location = indexContent.indexOf('</head>');
-        }
-
-
-        const bodyElementLocation = bodyElement.sourceCodeLocation;
-        if (bodyElementLocation && bodyElementLocation.endTag) {
-            this.body.location = bodyElementLocation.endTag.startOffset;
-        } else {
-            // Less accurate fallback
-            // parse5 4.x does not provide locations if malformed html is present
-            this.body.location = indexContent.indexOf('</body>');
-        }
+        /*  const headElementLocation = headElement.sourceCodeLocation;
+         if (headElementLocation && headElementLocation.endTag) {
+             this.head.location = headElementLocation.endTag.startOffset;
+         } else {
+             // Less accurate fallback
+             // parse5 4.x does not provide locations if malformed html is present
+             this.head.location = indexContent.indexOf('</head>');
+         }
+ 
+ 
+         const bodyElementLocation = bodyElement.sourceCodeLocation;
+         if (bodyElementLocation && bodyElementLocation.endTag) {
+             this.body.location = bodyElementLocation.endTag.startOffset;
+         } else {
+             // Less accurate fallback
+             // parse5 4.x does not provide locations if malformed html is present
+             this.body.location = indexContent.indexOf('</body>');
+         } */
 
 
         // Inject into the html
@@ -107,7 +119,7 @@ export class IndexWriter {
         this.insertFragmentsInIndex();
 
         // Add to compilation assets
-        this.compilation.assets[this.option.indexOutputPath] = this.indexSource;
+        this.compilation.assets[ this.option.indexOutputPath ] = this.indexSource;
     }
 
 
@@ -120,13 +132,13 @@ export class IndexWriter {
         ];
 
         if (sri) {
-            const content = this.compilation.assets[resolvedPath].source();
+            const content = this.compilation.assets[ resolvedPath ].source();
             attrs.push(...this.generateSriAttributes(content));
         }
 
         if (attributes) {
             // can be { name: 'rel', value: 'preload' }, { name: 'as', value: 'font' },
-            for (const [name, value] of Object.entries(attributes))
+            for (const [ name, value ] of Object.entries(attributes))
                 attrs.push({ name, value });
         }
 
@@ -139,6 +151,12 @@ export class IndexWriter {
 
         const fragmentData = place === 'head' ? this.head : this.body;
 
+        if (isUndefined(fragmentData.location)) {
+            const error = new Error(`Missing ${place} element in ${this.option.indexInputPath}`);
+            this.compilation.errors.push(error);
+            throw error;
+        }
+
         if (isUndefined(fragmentData.fragment))
             fragmentData.fragment = defaultTreeAdapter.createDocumentFragment();
 
@@ -149,7 +167,7 @@ export class IndexWriter {
 
     private insertFragmentsInIndex() {
 
-        for (const framgentData of [this.head, this.body]) {
+        for (const framgentData of [ this.head, this.body ]) {
             if (isDefined(framgentData.fragment)) {
                 this.indexSource.insert(
                     framgentData.location,
@@ -166,17 +184,17 @@ export class IndexWriter {
 
         return new Promise<string>((resolve, reject) => {
             this.compilation.inputFileSystem.readFile(indexInputPath, (err: Error, data: Buffer) => {
-                if (err) {
+                if (isDefined(err)) {
                     reject(err);
-
                     return;
                 }
 
-                let content;
-                if (data.length >= 3 && data[0] === 0xEF && data[1] === 0xBB && data[2] === 0xBF) {
+                let content: string = undefined;
+
+                if (data.length >= 3 && data[ 0 ] === 0xEF && data[ 1 ] === 0xBB && data[ 2 ] === 0xBF) {
                     // Strip UTF-8 BOM
                     content = data.toString('utf8', 3);
-                } else if (data.length >= 2 && data[0] === 0xFF && data[1] === 0xFE) {
+                } else if (data.length >= 2 && data[ 0 ] === 0xFF && data[ 1 ] === 0xFE) {
                     // Strip UTF-16 LE BOM
                     content = data.toString('utf16le', 2);
                 } else {

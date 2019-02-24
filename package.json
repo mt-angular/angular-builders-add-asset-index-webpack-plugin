@@ -6,16 +6,18 @@
     "scripts": {
         "postbuild": "yarn test && yarn e2e",
         "build": "tsc",
-        "test": "jest --config jest-ut.config.js ",
+        "test": "jest --config jest-ut.config.js",
         "e2e": "jest --config jest-e2e.config.js",
         "set-follow-symlinks-watcher": "sed -i 's/followSymlinks: false/followSymlinks: true/g' node_modules/watchpack/lib/DirectoryWatcher.js"
     },
     "devDependencies": {
         "@angular-devkit/build-angular": "^0.13.0",
+        "@types/globby": "^8.0.0",
         "@types/jest": "^23.3.13",
         "@types/parse5": "^5.0.0",
         "@types/webpack": "^4.4.24",
         "jest": "^24.0.0",
+        "jest-expect-message": "^1.0.2",
         "micromatch": "^3.1.10",
         "p-each-series": "^1.0.0",
         "parse5": "^5.1.0",
@@ -27,5 +29,8 @@
     },
     "dependencies": {
         "applicationinsights": "^1.1.0"
+    },
+    "majestic": {
+        "jestConfig": "jest-ut.config.js"
     }
 }

@@ -1,4 +1,7 @@
 import * as crypto from 'crypto';
+import { compilation } from 'webpack';
+
+export type Compilation = compilation.Compilation;
 
 export const pluginName = 'AddAssetIndexPlugin';
 

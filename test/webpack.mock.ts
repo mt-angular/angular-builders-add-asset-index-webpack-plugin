@@ -10,5 +10,5 @@ export interface WebpackAsset {
 export class WebpackCompilation {
     inputFileSystem = { readFile: undefined };
     errors: Array<Error> = [];
-    assets: WebpackAsset[] = [];
+    assets: { [ filepath: string ]: WebpackAsset } = {};
 } 

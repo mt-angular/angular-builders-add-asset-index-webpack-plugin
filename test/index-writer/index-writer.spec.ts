@@ -1,6 +1,5 @@
 import { IndexWriter, IndexWriterOption } from '../../src/index-writer';
-import { WebpackCompilation, ReadFileCallback } from '../webpack.mock';
-import { indexHtmlMock } from './index.html.mock';
+import { WebpackCompilation } from '../webpack.mock';
 import { hash } from '../../src/common';
 import { IndexWriterPrivate } from './index-writer.private';
 import { WebpackCompilationMock, MocksData } from './webpack-compilation.mock';
@@ -15,7 +14,7 @@ function createIndexWriter(compilation: WebpackCompilation, option?: Partial<Ind
 
 
 
-function createDatas(mocksData?: MocksData, indexWriterOption?: Partial<IndexWriterOption>) {
+function createMocks(mocksData?: MocksData, indexWriterOption?: Partial<IndexWriterOption>) {
     const compilation = new WebpackCompilationMock().init(mocksData).compilation;
     const indexWriter = createIndexWriter(compilation, indexWriterOption);
 
@@ -31,7 +30,7 @@ describe('Test suite of (all) IndexWriter public/private fields', () => {
             indexInputPath: '/home/user/Project/src/index.html',
         };
 
-        const { indexWriter } = createDatas(undefined, indexWriterOption);
+        const { indexWriter } = createMocks(undefined, indexWriterOption);
 
         expect(indexWriter.option).toEqual(indexWriterOption);
     });
@@ -40,7 +39,7 @@ describe('Test suite of (all) IndexWriter public/private fields', () => {
         const readFileContent = 'test';
         const indexInputPath = '/a/b/index.html';
 
-        const { indexWriter, compilation } = createDatas({ readFileContent }, { indexInputPath });
+        const { indexWriter, compilation } = createMocks({ readFileContent }, { indexInputPath });
 
         const content = await indexWriter.readFile();
 
@@ -49,8 +48,17 @@ describe('Test suite of (all) IndexWriter public/private fields', () => {
     });
 
 
+    test('readFile should throw if indexInputPath does not exist', async () => {
+        const readFileContent = new Error('file does not exist');
+
+        const { indexWriter } = createMocks({ readFileContent });
+
+        expect.assertions(1);
+        await expect(indexWriter.readFile()).rejects.toThrow(readFileContent);
+    });
+
     test('init should create this.{head, body, indexSource}', async () => {
-        const { indexWriter } = createDatas({ readFileContent: indexHtmlMock })
+        const { indexWriter } = createMocks();
         await indexWriter.init();
 
         expect(indexWriter.head.location).toBeGreaterThanOrEqual(0);
@@ -59,8 +67,25 @@ describe('Test suite of (all) IndexWriter public/private fields', () => {
     });
 
 
+    test('appendLinkToFragment should throw if place=head/body does not exist in index.html and write in compilation.errors', async () => {
+        expect.assertions(3);
+
+        const { indexWriter, compilation } = createMocks({ readFileContent: '' });
+        await indexWriter.init();
+
+        expect(indexWriter.head.location).toBe(undefined);
+
+        const errorMsg = `Missing head element in ${indexWriter.option.indexInputPath}`;
+
+        expect(() => indexWriter.appendLinkToFragment('head', undefined))
+            .toThrow(errorMsg);
+
+        expect(compilation.errors[ 0 ]).toEqual(new Error(errorMsg));
+    });
+
+
     test('init should be called in writeInIndex if init not called previously', () => {
-        const { indexWriter } = createDatas();
+        const { indexWriter } = createMocks();
 
         const initMock = indexWriter.init = jest.fn();
         indexWriter.writeInIndex([]);
@@ -74,7 +99,7 @@ describe('Test suite of (all) IndexWriter public/private fields', () => {
 
 
     test('createLink should create a link tag with the specific attributes of asset resolved', async () => {
-        const { indexWriter } = createDatas();
+        const { indexWriter } = createMocks();
 
         const { asset, linkAttrs } = assetResolved();
 
@@ -95,24 +120,25 @@ describe('Test suite of (all) IndexWriter public/private fields', () => {
 
 
     test('appendLinkToFragment should append to head or body depending the option', async () => {
-        const { indexWriter } = createDatas();
+        const { indexWriter } = createMocks();
+        await indexWriter.init();
 
         const { asset } = assetResolved();
 
         const link = indexWriter.createLink(asset);
 
         indexWriter.appendLinkToFragment('head', link);
-        const linkInHead = indexWriter.head.fragment.childNodes[0];
+        const linkInHead = indexWriter.head.fragment.childNodes[ 0 ];
         expect(link).toEqual(linkInHead);
 
         indexWriter.appendLinkToFragment('body', link);
-        const linkInBody = indexWriter.body.fragment.childNodes[0];
+        const linkInBody = indexWriter.body.fragment.childNodes[ 0 ];
         expect(link).toEqual(linkInBody);
     });
 
 
     test('writeInIndex should call createLink, appendLinkToFragment, insertFragmentsInIndex', async () => {
-        const { indexWriter } = createDatas();
+        const { indexWriter } = createMocks();
 
         indexWriter.createLink = jest.fn();
         indexWriter.appendLinkToFragment = jest.fn();
@@ -128,7 +154,7 @@ describe('Test suite of (all) IndexWriter public/private fields', () => {
     });
 
     test('writeInIndex should write in indexSource', async () => {
-        const { indexWriter } = createDatas();
+        const { indexWriter } = createMocks();
 
         const { assets, indexSourceReplacements } = assetsResolved();
 
@@ -136,11 +162,11 @@ describe('Test suite of (all) IndexWriter public/private fields', () => {
 
         const indexSourceReplacement = indexSourceReplacements.join('');
 
-        expect((indexWriter.indexSource.replacements[0] as any).content).toBe(indexSourceReplacement);
+        expect((indexWriter.indexSource.replacements[ 0 ] as any).content).toBe(indexSourceReplacement);
     });
 
     test('generateSriAttributes should generate the right attributes to insert in a link tag', async () => {
-        const { indexWriter } = createDatas();
+        const { indexWriter } = createMocks();
 
         const assetContent = 'test';
         const algo = 'sha384';
@@ -158,7 +184,7 @@ describe('Test suite of (all) IndexWriter public/private fields', () => {
     });
 
     test('sri option should generate the right attribute in the link tag', async () => {
-        const { indexWriter, compilation } = createDatas();
+        const { indexWriter, compilation } = createMocks();
 
         const { asset } = assetResolved({ sri: true })
 
@@ -166,7 +192,7 @@ describe('Test suite of (all) IndexWriter public/private fields', () => {
         const assetBuffer = Buffer.from(assetContent);
 
 
-        compilation.assets[asset.resolvedPath] = {
+        compilation.assets[ asset.resolvedPath ] = {
             source: () => assetBuffer,
             size: () => assetBuffer.length
         };
@@ -187,11 +213,11 @@ describe('Test suite of (all) IndexWriter public/private fields', () => {
 
 
     test('writeInIndex should insert indexSource in compilation.assets', async () => {
-        const { indexWriter, compilation } = createDatas();
+        const { indexWriter, compilation } = createMocks();
 
         const { assets } = assetsResolved();
 
         await indexWriter.writeInIndex(assets);
-        expect(compilation.assets[indexWriter.option.indexOutputPath]).toBe(indexWriter.indexSource);
+        expect(compilation.assets[ indexWriter.option.indexOutputPath ]).toBe(indexWriter.indexSource);
     });
 });

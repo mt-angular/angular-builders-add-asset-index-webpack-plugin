@@ -14,5 +14,8 @@ module.exports = {
         "json"
     ],
     testEnvironment: "./jest-custom-environment",
-    automock: false
+    setupFilesAfterEnv: ["jest-expect-message"],
+    automock: false,
+    collectCoverage: true,
+    coverageReporters: ["json", "html"]
 };
