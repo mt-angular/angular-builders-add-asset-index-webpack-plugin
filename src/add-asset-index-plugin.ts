@@ -149,11 +149,6 @@ export class AddAssetIndexPlugin {
                     assetsResolved.push({ asset, resolvedPath });
             }
         });
-        /* for (const asset of this.assets) {
-            const resolvedPaths = await asset.addFileToAssets();
-            for (const resolvedPath of resolvedPaths)
-                assetsResolved.push({ asset, resolvedPath });
-        } */
 
         return assetsResolved;
     }

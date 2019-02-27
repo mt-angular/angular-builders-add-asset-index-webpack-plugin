@@ -76,26 +76,6 @@ export class IndexWriter {
             }
         }
 
-        /*  const headElementLocation = headElement.sourceCodeLocation;
-         if (headElementLocation && headElementLocation.endTag) {
-             this.head.location = headElementLocation.endTag.startOffset;
-         } else {
-             // Less accurate fallback
-             // parse5 4.x does not provide locations if malformed html is present
-             this.head.location = indexContent.indexOf('</head>');
-         }
- 
- 
-         const bodyElementLocation = bodyElement.sourceCodeLocation;
-         if (bodyElementLocation && bodyElementLocation.endTag) {
-             this.body.location = bodyElementLocation.endTag.startOffset;
-         } else {
-             // Less accurate fallback
-             // parse5 4.x does not provide locations if malformed html is present
-             this.body.location = indexContent.indexOf('</body>');
-         } */
-
-
         // Inject into the html
         this.indexSource = new ReplaceSource(new RawSource(indexContent), this.option.indexInputPath);
     }
