@@ -2,12 +2,12 @@
 import { IndexHtmlWebpackPluginOptions } from '@angular-devkit/build-angular/src/angular-cli-files/plugins/index-html-webpack-plugin';
 import {
 	/* BuilderParameters, */ NormalizedCustomWebpackBrowserBuildSchema
-} from '../linked_modules/@mt/custom-webpack-builder/custom-webpack-builder';
+} from '../linked_modules/@mt/custom-webpack-builder-src/custom-webpack-builder';
 import * as path from 'path';
 
 import { Compiler, Configuration as WebpackConfiguration } from 'webpack';
 
-import { isArray } from '../linked_modules/@mt/util/is';
+import { isArray, isDefined } from '../linked_modules/@mt/util/is';
 
 // import micromatch from 'micromatch';
 
@@ -28,6 +28,7 @@ export interface BuilderParametersOptions {
     place?: AssetOption[ 'place' ];
     hash?: boolean;
 }
+
 
 export interface BuilderParameters {
     root: Path;
@@ -68,7 +69,8 @@ export class AddAssetIndexPlugin {
 
     private getBuilderOptions(builderParameters: BuilderParameters): AddAssetIndexPluginOptions {
         const root = getSystemPath(builderParameters.root);
-        const { index, baseHref = '', deployUrl = '', subresourceIntegrity = false, hash = false } = builderParameters.options;
+
+        const { index, baseHref, deployUrl, subresourceIntegrity, hash, place, attributes } = builderParameters.options;
 
         // copied from '@angular-devkit/build-angular/src/angular-cli-files/plugins/index-html-webpack-plugin'
         const buildOptions = {
@@ -82,7 +84,7 @@ export class AddAssetIndexPlugin {
         };
 
         // copied from @angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs/browser.ts
-        const options = {
+        const options: AddAssetIndexPluginOptions = {
             input: 'index.html',
             output: 'index.html',
             // entrypoints: ['polyfills', 'main'],
@@ -90,12 +92,20 @@ export class AddAssetIndexPlugin {
             sri: false,
             ...buildOptions,
             // My addition
-            place: builderParameters.options.place,
-            attributes: builderParameters.options.attributes,
+            place,
+            attributes,
             hash: hash || builderParameters.webpackConfiguration.mode === 'production'
         };
 
-        return options;
+
+        const addAssetIndexPluginOptions: AddAssetIndexPluginOptions = {} as any;
+
+        for (const [ k, v ] of Object.entries(options)) {
+            if (isDefined(v))
+                addAssetIndexPluginOptions[ k ] = v;
+        }
+
+        return addAssetIndexPluginOptions;
     }
 
     initAssets() {

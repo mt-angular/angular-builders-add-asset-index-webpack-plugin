@@ -53,7 +53,6 @@ for (const mode of modes) {
 }
 
 
-
 describe.each(modes)(
     'Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = %s End2End',
     (mode: 'development' | 'production') => {

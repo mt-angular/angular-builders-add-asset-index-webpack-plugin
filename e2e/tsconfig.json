@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        // "baseUrl": "../",
+        "target": "es2017",
+        "lib": [],
+    },
+    "include": [
+        "**/*.ts"
+    ]
+}

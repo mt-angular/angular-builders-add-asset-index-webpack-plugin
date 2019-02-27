@@ -13,11 +13,11 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
     <link rel=\\"icon\\" type=\\"image/x-icon\\" href=\\"favicon.ico\\">
 
 
-</head>
+<link href=\\"assets/font/libre-franklin/libre-franklin-v2-latin-400.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-300.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-400.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-500.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-700.woff2\\"></head>
 
 <body>
     <app-root class=\\"mt mat-typography\\"></app-root>
-<link href=\\"assets/font/libre-franklin/libre-franklin-v2-latin-400.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-300.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-400.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-500.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-700.woff2\\"></body>
+</body>
 
 </html>
 "
@@ -36,11 +36,11 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
     <link rel=\\"icon\\" type=\\"image/x-icon\\" href=\\"favicon.ico\\">
 
 
-</head>
+<link href=\\"assets/font/rubik/rubik-v7-latin-300.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-400.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-500.woff2\\"></head>
 
 <body>
     <app-root class=\\"mt mat-typography\\"></app-root>
-<link href=\\"assets/font/rubik/rubik-v7-latin-300.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-400.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-500.woff2\\"></body>
+</body>
 
 </html>
 "
@@ -59,11 +59,11 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
     <link rel=\\"icon\\" type=\\"image/x-icon\\" href=\\"favicon.ico\\">
 
 
-</head>
+<link href=\\"assets/font/libre-franklin/libre-franklin-v2-latin-400.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-300.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-400.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-500.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-700.woff2\\"></head>
 
 <body>
     <app-root class=\\"mt mat-typography\\"></app-root>
-<link href=\\"assets/font/libre-franklin/libre-franklin-v2-latin-400.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-300.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-400.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-500.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-700.woff2\\"></body>
+</body>
 
 </html>
 "
@@ -128,11 +128,11 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
     <link rel=\\"icon\\" type=\\"image/x-icon\\" href=\\"favicon.ico\\">
 
 
-</head>
+<link href=\\"assets/font/libre-franklin/libre-franklin-v2-latin-400.8d503c823a91e889c0e7.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-300.eb02199844b4e2a0871c.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-400.1ecc21093d3c8aa44b3e.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-500.d3fd715f234b8dcdd09d.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-700.9aff6f99df5790ad5dbd.woff2\\"></head>
 
 <body>
     <app-root class=\\"mt mat-typography\\"></app-root>
-<link href=\\"assets/font/libre-franklin/libre-franklin-v2-latin-400.8d503c823a91e889c0e7.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-300.eb02199844b4e2a0871c.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-400.1ecc21093d3c8aa44b3e.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-500.d3fd715f234b8dcdd09d.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-700.9aff6f99df5790ad5dbd.woff2\\"></body>
+</body>
 
 </html>
 "
@@ -151,11 +151,11 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
     <link rel=\\"icon\\" type=\\"image/x-icon\\" href=\\"favicon.ico\\">
 
 
-</head>
+<link href=\\"assets/font/rubik/rubik-v7-latin-300.eb02199844b4e2a0871c.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-400.1ecc21093d3c8aa44b3e.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-500.d3fd715f234b8dcdd09d.woff2\\"></head>
 
 <body>
     <app-root class=\\"mt mat-typography\\"></app-root>
-<link href=\\"assets/font/rubik/rubik-v7-latin-300.eb02199844b4e2a0871c.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-400.1ecc21093d3c8aa44b3e.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-500.d3fd715f234b8dcdd09d.woff2\\"></body>
+</body>
 
 </html>
 "
@@ -174,11 +174,11 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
     <link rel=\\"icon\\" type=\\"image/x-icon\\" href=\\"favicon.ico\\">
 
 
-</head>
+<link href=\\"assets/font/libre-franklin/libre-franklin-v2-latin-400.8d503c823a91e889c0e7.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-300.eb02199844b4e2a0871c.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-400.1ecc21093d3c8aa44b3e.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-500.d3fd715f234b8dcdd09d.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-700.9aff6f99df5790ad5dbd.woff2\\"></head>
 
 <body>
     <app-root class=\\"mt mat-typography\\"></app-root>
-<link href=\\"assets/font/libre-franklin/libre-franklin-v2-latin-400.8d503c823a91e889c0e7.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-300.eb02199844b4e2a0871c.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-400.1ecc21093d3c8aa44b3e.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-500.d3fd715f234b8dcdd09d.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-700.9aff6f99df5790ad5dbd.woff2\\"></body>
+</body>
 
 </html>
 "

@@ -11,14 +11,15 @@
         "set-follow-symlinks-watcher": "sed -i 's/followSymlinks: false/followSymlinks: true/g' node_modules/watchpack/lib/DirectoryWatcher.js"
     },
     "devDependencies": {
-        "@angular-devkit/build-angular": "^0.13.0",
+        "@angular-devkit/build-angular": "^0.13.3",
+        "@angular/core": "^7.2.7",
         "@types/globby": "^8.0.0",
         "@types/jest": "^24.0.9",
         "@types/node": "^11.9.5",
         "@types/parse5": "^5.0.0",
-        "@types/webpack": "^4.4.24",
+        "@types/webpack": "^4.4.25",
         "clean-webpack-plugin": "^1.0.1",
-        "jest": "^24.0.0",
+        "jest": "^24.1.0",
         "jest-expect-message": "^1.0.2",
         "micromatch": "^3.1.10",
         "p-each-series": "^1.0.0",
@@ -31,7 +32,7 @@
         "webpack-cli": "^3.2.3"
     },
     "dependencies": {
-        "applicationinsights": "^1.1.0"
+        "@angular-devkit/core": "^7.3.3"
     },
     "majestic": {
         "jestConfig": "jest-ut.config.js"
