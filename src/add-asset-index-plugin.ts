@@ -47,7 +47,6 @@ export type AddAssetIndexPluginOptions = Pick<
 
 export interface AssetResolved {
     asset: Asset;
-    // basename: string;
     resolvedPath: string;
 }
 
@@ -60,7 +59,7 @@ export class AddAssetIndexPlugin {
     private compilation: Compilation;
 
     constructor(assetsOption: AssetOption | AssetOption[], builderParameters: BuilderParameters) {
-        // '@angular-devkit/build-angular/src/angular-cli-files/plugins/index-html-webpack-plugin'
+        // @angular-devkit/build-angular/src/angular-cli-files/plugins/index-html-webpack-plugin
         // new IndexHtmlWebpackPlugin(); if one day we need. Like we could overwrite
         this.root = builderParameters.root;
         this.option = this.getBuilderOptions(builderParameters); // Object.assign(new Option(), option);
@@ -69,7 +68,7 @@ export class AddAssetIndexPlugin {
 
     private getBuilderOptions(builderParameters: BuilderParameters): AddAssetIndexPluginOptions {
         const root = getSystemPath(builderParameters.root);
-        const { index, baseHref, deployUrl, subresourceIntegrity, hash } = builderParameters.options;
+        const { index, baseHref = '', deployUrl = '', subresourceIntegrity = false, hash = false } = builderParameters.options;
 
         // copied from '@angular-devkit/build-angular/src/angular-cli-files/plugins/index-html-webpack-plugin'
         const buildOptions = {

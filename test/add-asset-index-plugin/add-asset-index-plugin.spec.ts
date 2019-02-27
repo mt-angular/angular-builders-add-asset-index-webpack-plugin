@@ -1,73 +1,17 @@
 import * as path from 'path';
-import { AddAssetIndexPlugin, BuilderParameters, AssetResolved } from '../../src/add-asset-index-plugin';
+import { AddAssetIndexPlugin, AssetResolved } from '../../src/add-asset-index-plugin';
 import { AddAssetIndexPluginPrivate } from './add-asset-index-plugin.private';
-import { assignRecursive } from '../../linked_modules/@mt/util/assign';
-import { PartialRecursive } from '../../linked_modules/@mt/util/type';
-import { WebpackCompilationMock } from '../index-writer/webpack-compilation.mock';
-import { isDefined, isArray } from '../../linked_modules/@mt/util/is';
-import { IndexWriter } from '../../src/index-writer';
-import { Compilation } from '../../src/common';
-import { Compiler } from 'webpack';
-
-import { AssetOption, Asset } from '../../src/asset';
+import { Asset } from '../../src/asset';
 import { AssetPrivate } from '../asset/asset.private';
 import { globbyMock } from '../asset/globby.mock';
+import { IndexWriter } from '../../src/index-writer';
+import { WebpackCompilationMock } from '../index-writer/webpack-compilation.mock';
+import { Compilation } from '../../src/common';
+import { Compiler } from 'webpack';
 import { ExecuteOnTempState } from '../../linked_modules/@mt/util/execute-temporary-state';
+import { root, createAddAssetIndexPlugin, defaultAssetOption } from './add-asset-index-plugin.mock';
 
 
-interface CreateOptionParam<T> {
-    param: PartialRecursive<T>;
-    noDefault?: boolean;
-}
-
-const root = '/path/to/root';
-const defaultAssetOption = { filepath: 'assets/font/**/*.woff2' };
-const defaultBuilderOption = {
-    options: {
-        index: path.join(root, 'src/index.html'),
-        subresourceIntegrity: false,
-        baseHref: undefined as string,
-        deployUrl: undefined as string,
-        place: 'head',
-        hash: false
-    },
-    webpackConfiguration: {
-        mode: 'development'
-    }
-};
-
-function createAddAssetIndexPlugin(
-    assetsOption?: CreateOptionParam<AssetOption | AssetOption[]>,
-    builderParameters?: CreateOptionParam<BuilderParameters>
-): AddAssetIndexPluginPrivate {
-
-
-
-    let assetsO: AssetOption | AssetOption[] = undefined;
-
-    if (isDefined(assetsOption) && isArray(assetsOption.param))
-        assetsO = assetsOption.param as AssetOption[];
-    else {
-        assetsO = assignRecursive(
-            {},
-            !assetsOption || !assetsOption.noDefault ? defaultAssetOption : {},
-            assetsOption ? assetsOption.param : {}
-        ) as AssetOption;
-    }
-
-    const builderParametersO = assignRecursive(
-        { root },
-        !builderParameters || !builderParameters.noDefault ? defaultBuilderOption : {},
-        builderParameters ? builderParameters.param : {}
-    ) as BuilderParameters;
-
-    /* const a = { a: 1, b: 2, c: { c11: 11, c12: 12, c13: { c21: 21, c22: 22 } }, d: 3 };
-    const b = { b: 3, c: { c11: 50, c13: { c22: 100 } } };
-    const a0 = { b: 2 };
-    console.log(assignRecursive(a0, a, b)); */
-
-    return new AddAssetIndexPlugin(assetsO, builderParametersO) as any;
-}
 
 describe('Test suite for AddAssetIndexPlugin', () => {
 

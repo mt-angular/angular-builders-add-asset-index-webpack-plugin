@@ -6,6 +6,7 @@ import { AssetResolved } from './add-asset-index-plugin';
 import { isDefined, isUndefined, isNull, isNil } from '../linked_modules/@mt/util/is';
 import { LocationInIndex } from './asset';
 import { hash, HashOption } from './common';
+import { pathNormlize } from '../linked_modules/@mt/util/path-normalize';
 
 type Compilation = compilation.Compilation;
 
@@ -15,7 +16,7 @@ export class FragmentData {
 }
 
 export class IndexWriterOption {
-    indexInputPath: string = 'src/index.html';
+    indexInputPath: string = pathNormlize('src/index.html');
     indexOutputPath: string = 'index.html';
 }
 
@@ -56,8 +57,6 @@ export class IndexWriter {
                 }
             }
         }
-
-
 
 
         for (const { location, tagName } of [
@@ -184,7 +183,7 @@ export class IndexWriter {
 
         return new Promise<string>((resolve, reject) => {
             this.compilation.inputFileSystem.readFile(indexInputPath, (err: Error, data: Buffer) => {
-                if (isDefined(err)) {
+                if (!isNil(err)) {
                     reject(err);
                     return;
                 }
