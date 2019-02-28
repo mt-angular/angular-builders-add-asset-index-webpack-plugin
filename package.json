@@ -4,10 +4,13 @@
     "main": "dist",
     "license": "MIT",
     "scripts": {
-        "postbuild": "yarn test && yarn e2e",
+        "postbuild": "yarn all-test",
         "build": "tsc",
+        "all-test": "yarn test && yarn e2e",
         "test": "jest --config jest-ut.config.js",
-        "e2e": "jest --config jest-e2e.config.js",
+        "e2e": "yarn e2e-plain-webpack && yarn e2e-angular",
+        "e2e-plain-webpack": "jest --config jest-e2e-plainwebpack.config.js",
+        "e2e-angular": "jest --config jest-e2e-angular.config.js",
         "set-follow-symlinks-watcher": "sed -i 's/followSymlinks: false/followSymlinks: true/g' node_modules/watchpack/lib/DirectoryWatcher.js"
     },
     "devDependencies": {

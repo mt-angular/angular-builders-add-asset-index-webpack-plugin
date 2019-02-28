@@ -1,6 +1,7 @@
+// just for IDE//
 {
     "compilerOptions": {
-        // "baseUrl": "../",
+        //        "baseUrl": "../",
         "target": "es2017",
         "lib": [],
     },

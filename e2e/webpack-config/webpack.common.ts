@@ -1,6 +1,7 @@
 
 import * as CleanWebpackPlugin from 'clean-webpack-plugin';
 import * as path from 'path';
+import { pathNormlize } from '../../linked_modules/@mt/util/path-normalize';
 
 export type Mode = 'development' | 'production';
 
@@ -11,7 +12,7 @@ export const dist = (mode: Mode) => path.join(root, distRelative(mode));
 
 export function commonWebpackConfiguration(option: { mode: Mode }) {
     return {
-        entry: path.resolve(root, 'src/index.js'),
+        entry: path.resolve(root, pathNormlize('src/index.js')),
         output: {
             path: dist(option.mode), // to be overriden afterwards
             filename: 'index_bundle.js',
