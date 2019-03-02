@@ -4,6 +4,7 @@ import { AssetResolved } from '../../src/add-asset-index-plugin';
 import { LocationInIndex } from '../../src/asset';
 import * as parse5 from 'parse5';
 import { ReplaceSource } from 'webpack-sources';
+import { SerializerOption } from '../../src/html-serializer';
 
 export interface IndexWriterPrivate {
     head: FragmentData;
@@ -24,4 +25,5 @@ export interface IndexWriterPrivate {
     insertFragmentsInIndex(): void;
     readFile(): Promise<string>;
     generateSriAttributes(content: string, algo?: string): { name: string; value: string }[];
+    serializeHtml(node: parse5.Node, options: SerializerOption): string;
 }

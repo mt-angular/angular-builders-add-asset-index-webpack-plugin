@@ -8,11 +8,11 @@ const root = path.resolve(__dirname, '..');
 function addAssetIndexPlugin(option) {
     const configs = [];
     const defaultParametersBlob = new add_asset_index_plugin_1.AddAssetIndexPlugin([{
-            filepath: path.resolve(root, path_normalize_1.pathNormlize('assets/font/**/*.woff2'))
+            filepath: path.resolve(root, path_normalize_1.pathNormalize('assets/font/**/*.woff2'))
         }], {
         root: root,
         options: {
-            index: path.join(root, path_normalize_1.pathNormlize('src/index.html'))
+            index: path.join(root, path_normalize_1.pathNormalize('src/index.html'))
         },
         webpackConfiguration: {
             mode: option.mode
@@ -24,14 +24,14 @@ function addAssetIndexPlugin(option) {
         outputDir: path.join(webpack_common_1.dist(option.mode), 'defaultParametersBlob')
     });
     const defaultParametersFewBlobs = new add_asset_index_plugin_1.AddAssetIndexPlugin([{
-            filepath: path.resolve(root, path_normalize_1.pathNormlize('assets/font/libre-franklin/*.woff2'))
+            filepath: path.resolve(root, path_normalize_1.pathNormalize('assets/font/libre-franklin/*.woff2'))
         },
         {
-            filepath: path.resolve(root, path_normalize_1.pathNormlize('assets/font/rubik/*.woff2'))
+            filepath: path.resolve(root, path_normalize_1.pathNormalize('assets/font/rubik/*.woff2'))
         }], {
         root: root,
         options: {
-            index: path.join(root, path_normalize_1.pathNormlize('src/index.html'))
+            index: path.join(root, path_normalize_1.pathNormalize('src/index.html'))
         },
         webpackConfiguration: {
             mode: option.mode
@@ -43,17 +43,17 @@ function addAssetIndexPlugin(option) {
         outputDir: path.join(webpack_common_1.dist(option.mode), 'defaultParametersFewBlobs')
     });
     const defaultParametersFewFiles = new add_asset_index_plugin_1.AddAssetIndexPlugin([{
-            filepath: path.resolve(root, path_normalize_1.pathNormlize('assets/font/rubik/rubik-v7-latin-300.woff2'))
+            filepath: path.resolve(root, path_normalize_1.pathNormalize('assets/font/rubik/rubik-v7-latin-300.woff2'))
         },
         {
-            filepath: path.resolve(root, path_normalize_1.pathNormlize('assets/font/rubik/rubik-v7-latin-400.woff2'))
+            filepath: path.resolve(root, path_normalize_1.pathNormalize('assets/font/rubik/rubik-v7-latin-400.woff2'))
         },
         {
-            filepath: path.resolve(root, path_normalize_1.pathNormlize('assets/font/rubik/rubik-v7-latin-500.woff2'))
+            filepath: path.resolve(root, path_normalize_1.pathNormalize('assets/font/rubik/rubik-v7-latin-500.woff2'))
         }], {
         root: root,
         options: {
-            index: path.join(root, path_normalize_1.pathNormlize('src/index.html'))
+            index: path.join(root, path_normalize_1.pathNormalize('src/index.html'))
         },
         webpackConfiguration: {
             mode: option.mode
@@ -65,11 +65,11 @@ function addAssetIndexPlugin(option) {
         outputDir: path.join(webpack_common_1.dist(option.mode), 'defaultParametersFewFiles')
     });
     const oneBlobWithGenericOptions = new add_asset_index_plugin_1.AddAssetIndexPlugin([{
-            filepath: path.resolve(root, path_normalize_1.pathNormlize('assets/font/**/*.woff2'))
+            filepath: path.resolve(root, path_normalize_1.pathNormalize('assets/font/**/*.woff2'))
         }], {
         root: root,
         options: {
-            index: path.join(root, path_normalize_1.pathNormlize('src/index.html')),
+            index: path.join(root, path_normalize_1.pathNormalize('src/index.html')),
             subresourceIntegrity: false,
             baseHref: 'public/base',
             deployUrl: 'public/deploy',
@@ -90,7 +90,7 @@ function addAssetIndexPlugin(option) {
         outputDir: path.join(webpack_common_1.dist(option.mode), 'oneBlobWithGenericOptions')
     });
     const fewBlobsWithAssetOptions = new add_asset_index_plugin_1.AddAssetIndexPlugin([{
-            filepath: path.resolve(root, path_normalize_1.pathNormlize('assets/font/libre-franklin/*.woff2')),
+            filepath: path.resolve(root, path_normalize_1.pathNormalize('assets/font/libre-franklin/*.woff2')),
             attributes: {
                 as: 'font',
                 rel: 'preload',
@@ -102,7 +102,7 @@ function addAssetIndexPlugin(option) {
             sri: true
         },
         {
-            filepath: path.resolve(root, path_normalize_1.pathNormlize('assets/font/rubik/*.woff2')),
+            filepath: path.resolve(root, path_normalize_1.pathNormalize('assets/font/rubik/*.woff2')),
             attributes: {
                 as: 'font',
                 rel: 'preload',
@@ -114,7 +114,7 @@ function addAssetIndexPlugin(option) {
         }], {
         root: root,
         options: {
-            index: path.join(root, path_normalize_1.pathNormlize('src/index.html')),
+            index: path.join(root, path_normalize_1.pathNormalize('src/index.html')),
             subresourceIntegrity: false,
             baseHref: 'public/base0',
             deployUrl: 'public/deploy0',

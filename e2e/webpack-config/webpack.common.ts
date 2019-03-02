@@ -1,7 +1,8 @@
 
 import * as CleanWebpackPlugin from 'clean-webpack-plugin';
 import * as path from 'path';
-import { pathNormlize } from '../../linked_modules/@mt/util/path-normalize';
+import { pathNormalize } from '../../linked_modules/@mt/util-dist/path-normalize';
+// I use util-dist instead of util because in this tsconfig I didn't put a outDir, then it would compile close to the original file
 
 export type Mode = 'development' | 'production';
 
@@ -12,7 +13,7 @@ export const dist = (mode: Mode) => path.join(root, distRelative(mode));
 
 export function commonWebpackConfiguration(option: { mode: Mode }) {
     return {
-        entry: path.resolve(root, pathNormlize('src/index.js')),
+        entry: path.resolve(root, pathNormalize('src/index.js')),
         output: {
             path: dist(option.mode), // to be overriden afterwards
             filename: 'index_bundle.js',

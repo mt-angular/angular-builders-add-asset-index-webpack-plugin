@@ -1,8 +1,8 @@
 import { execAsyncCommand, readFileAsync } from './util';
 import * as path from 'path';
-import { pathNormlize } from '../linked_modules/@mt/util/path-normalize';
+import { pathNormalize } from '../linked_modules/@mt/util/path-normalize';
 
-const angularDir = path.join(__dirname, pathNormlize('../angular-test'));
+const angularDir = path.join(__dirname, pathNormalize('../angular-test'));
 
 describe(
     // tslint:disable-next-line: max-line-length
@@ -22,7 +22,7 @@ describe(
                 await execAsyncCommand(command);
 
                 const indexHTML = await readFileAsync(
-                    path.resolve(__dirname, angularDir, pathNormlize('dist/angular-test/index.html')),
+                    path.resolve(__dirname, angularDir, pathNormalize('dist/angular-test/index.html')),
                     { encoding: 'utf8' });
 
                 expect(indexHTML).toMatchSnapshot();

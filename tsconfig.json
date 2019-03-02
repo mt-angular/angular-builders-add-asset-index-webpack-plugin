@@ -16,13 +16,5 @@
         "strict": false, /* Enable all strict type-checking options. */
         // "esModuleInterop": true, /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
         "preserveSymlinks": true, /* Do not resolve the real path of symlinks. */
-        "paths": {
-            "@mt/custom-webpack-builder": [
-                "linked_modules/@mt/custom-webpack-builder"
-            ],
-            "@mt/custom-webpack-builder/*": [
-                "linked_modules/@mt/custom-webpack-builder/*"
-            ]
-        }
     }
 }

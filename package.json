@@ -5,7 +5,7 @@
     "license": "MIT",
     "scripts": {
         "postbuild": "yarn all-test",
-        "build": "tsc",
+        "build": "rm -R dist && tsc",
         "all-test": "yarn test && yarn e2e",
         "test": "jest --config jest-ut.config.js",
         "e2e": "yarn e2e-plain-webpack && yarn e2e-angular",

@@ -153,6 +153,23 @@ describe('Test suite of (all) IndexWriter public/private fields', () => {
         expect(indexWriter.insertFragmentsInIndex).toHaveBeenCalledTimes(1);
     });
 
+    test('insertFragmentsInIndex should call serializeHtml', async () => {
+        const { indexWriter } = createMocks();
+
+
+        const { assets, indexSourceReplacements } = assetsResolved();
+
+        const insertFragmentsInIndexMock = jest.spyOn(indexWriter, 'insertFragmentsInIndex');
+        const serializeHtmlMock = jest.spyOn(indexWriter, 'serializeHtml');
+
+        await indexWriter.writeInIndex([ assets[ 0 ] ]);
+
+        expect(insertFragmentsInIndexMock).toHaveBeenCalledTimes(1);
+        expect(serializeHtmlMock).toHaveBeenCalledTimes(1);
+        expect(serializeHtmlMock).toHaveBeenCalledWith(indexWriter.head.fragment, expect.any(Object));
+        expect(serializeHtmlMock).toHaveReturnedWith(indexSourceReplacements[ 0 ]);
+    });
+
     test('writeInIndex should write in indexSource', async () => {
         const { indexWriter } = createMocks();
 
@@ -186,7 +203,7 @@ describe('Test suite of (all) IndexWriter public/private fields', () => {
     test('sri option should generate the right attribute in the link tag', async () => {
         const { indexWriter, compilation } = createMocks();
 
-        const { asset } = assetResolved({ sri: true })
+        const { asset } = assetResolved({ sri: true });
 
         const assetContent = 'test';
         const assetBuffer = Buffer.from(assetContent);

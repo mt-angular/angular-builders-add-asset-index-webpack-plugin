@@ -1,26 +1,11 @@
-//{
-//    "compilerOptions": {
-//        "baseUrl": "../",
-//        "target": "es2017",
-//        "lib": [],
-//    },
-//    "include": [
-//        "**/*.ts"
-//    ]
-//}
 // just for IDE//
 {
-    "extends": "../tsconfig.json",
     "compilerOptions": {
-        "outDir": "",
-        "types": [
-            "jest",
-            "node"
-        ]
+        //        "baseUrl": "../",
+        "target": "es2017",
+        "lib": [],
     },
     "include": [
-        "**/*.spec.ts",
-        "**/*.d.ts"
-    ],
-    "exclude": []
+        "**/*.ts"
+    ]
 }

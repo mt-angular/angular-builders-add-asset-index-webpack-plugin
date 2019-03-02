@@ -23,6 +23,29 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
 "
 `;
 
+exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = development End2End Snapshot index.html: AddAssetIndexPlugin default parameters with few blobs 2`] = `
+"<!doctype html>
+<html lang=\\"fr\\">
+
+<head>
+    <meta charset=\\"utf-8\\">
+    <title>IFA</title>
+    <base href=\\"/\\">
+
+    <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1, user-scalable=no\\">
+    <link rel=\\"icon\\" type=\\"image/x-icon\\" href=\\"favicon.ico\\">
+
+
+<link href=\\"assets/font/libre-franklin/libre-franklin-v2-latin-400.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-300.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-400.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-500.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-700.woff2\\"></head>
+
+<body>
+    <app-root class=\\"mt mat-typography\\"></app-root>
+</body>
+
+</html>
+"
+`;
+
 exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = development End2End Snapshot index.html: AddAssetIndexPlugin default parameters with few files 1`] = `
 "<!doctype html>
 <html lang=\\"fr\\">

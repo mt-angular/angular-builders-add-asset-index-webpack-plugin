@@ -6,7 +6,8 @@ import { AssetResolved } from './add-asset-index-plugin';
 import { isDefined, isUndefined, isNull, isNil } from '../linked_modules/@mt/util/is';
 import { LocationInIndex } from './asset';
 import { hash, HashOption } from './common';
-import { pathNormlize } from '../linked_modules/@mt/util/path-normalize';
+import { pathNormalize } from '../linked_modules/@mt/util/path-normalize';
+import { HtmlSerializer, SerializerOption } from './html-serializer';
 
 type Compilation = compilation.Compilation;
 
@@ -16,7 +17,7 @@ export class FragmentData {
 }
 
 export class IndexWriterOption {
-    indexInputPath: string = pathNormlize('src/index.html');
+    indexInputPath: string = pathNormalize('src/index.html');
     indexOutputPath: string = 'index.html';
 }
 
@@ -146,17 +147,24 @@ export class IndexWriter {
 
     private insertFragmentsInIndex() {
 
-        for (const framgentData of [ this.head, this.body ]) {
-            if (isDefined(framgentData.fragment)) {
+        for (const fragmentData of [ this.head, this.body ]) {
+            if (isDefined(fragmentData.fragment)) {
                 this.indexSource.insert(
-                    framgentData.location,
-                    parse5.serialize(framgentData.fragment, { treeAdapter: defaultTreeAdapter }),
+                    fragmentData.location,
+                    // parse5.serialize is not handling boolean attributes
+                    this.serializeHtml(fragmentData.fragment, { treeAdapter: defaultTreeAdapter }),
                 );
             }
         }
 
     }
 
+
+    private serializeHtml(node: parse5.Node, options: SerializerOption): string {
+        const serializer = new HtmlSerializer(node, options);
+
+        return serializer.serialize();
+    }
 
     private async readFile(): Promise<string> {
         const { indexInputPath } = this.option;
