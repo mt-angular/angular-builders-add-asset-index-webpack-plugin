@@ -2,9 +2,9 @@ import * as path from 'path';
 import { AssetOption } from '../../src/asset';
 import { BuilderParameters, AddAssetIndexPlugin, BuilderParametersOptions } from '../../src/add-asset-index-plugin';
 import { AddAssetIndexPluginPrivate } from './add-asset-index-plugin.private';
-import { isDefined, isArray } from '../../linked_modules/@mt/util/is';
-import { assignRecursive } from '../../linked_modules/@mt/util/assign';
-import { PartialRecursive } from '../../linked_modules/@mt/util/type';
+import { isDefined, isArray } from '../../linked_modules/@mt/browser-util/is';
+import { assignRecursive } from '../../linked_modules/@mt/browser-util/assign';
+import { PartialRecursive } from '../../linked_modules/@mt/browser-util/type';
 
 export interface CreateOptionParam<T> {
     param: PartialRecursive<T>;

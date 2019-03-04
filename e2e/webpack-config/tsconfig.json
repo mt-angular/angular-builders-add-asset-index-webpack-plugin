@@ -7,7 +7,7 @@
         "**/*.spec.ts"
     ],
     "compilerOptions": {
-        "baseUrl": "./",
+        // "baseUrl": "./",
         "moduleResolution": "node",
         // "outDir": "dist",
         "sourceMap": true,

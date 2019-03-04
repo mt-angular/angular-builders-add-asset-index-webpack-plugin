@@ -1,6 +1,6 @@
 import { execAsyncCommand, readFileAsync } from './util';
 import * as path from 'path';
-import { pathNormalize } from '../linked_modules/@mt/util/path-normalize';
+import { pathNormalize } from '../linked_modules/@mt/node-util/path-normalize';
 
 const angularDir = path.join(__dirname, pathNormalize('../angular-test'));
 

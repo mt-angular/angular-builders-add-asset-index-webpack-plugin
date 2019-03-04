@@ -9,6 +9,18 @@ console.log('Extra Webpack : Thomas Milotti :)');
 module.exports = (builderParameters) => {
 
     return {
+        /*  module: {
+             rules: [
+                 {
+                     // test: /\.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)$/,
+                     test: /\.css$/,
+                     loader: 'css-loader',
+                     options: {
+                         name: `[name][hash].[ext]`,
+                     },
+                 }
+             ],
+         }, */
         plugins: [
             /* new webpack.DefinePlugin({
               ENVIRONMENT: JSON.stringify('browser')
@@ -20,7 +32,8 @@ module.exports = (builderParameters) => {
 
             new AddAssetIndexPlugin([
                 {
-                    filepath: 'src/assets/font/**/*.woff2',
+                    // filepath: 'src/font/**/*.woff2',
+                    filepath: 'src/font/**/*.woff2',
                     /* attributes: {
                         as: 'font',
                         rel: 'preload',
@@ -30,6 +43,12 @@ module.exports = (builderParameters) => {
                     hash: true,
                     place: 'head',
                     sri: true */
+                    outputDir: filepath => {
+                        const split = filepath.split('src/font/');
+                        const newpath = path.join('assets/bust-cached-font', split[1]);
+
+                        return path.dirname(newpath);
+                    }
                 }
             ], builderParameters)
         ],

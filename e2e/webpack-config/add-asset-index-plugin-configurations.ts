@@ -1,6 +1,8 @@
+// to not compile it in the dist folder again. It will be compile already in the e2e.spec
 import { AddAssetIndexPlugin } from '../../dist/src/add-asset-index-plugin';
 import * as path from 'path';
-import { pathNormalize } from '../../linked_modules/@mt/util/path-normalize';
+import { pathNormalize } from '../../linked_modules/@mt/node-util-dist/path-normalize';
+// I use util-dist instead of util because in this tsconfig I didn't put a outDir, then it would compile close to the original file
 import { dist, Mode } from './webpack.common';
 
 
@@ -178,6 +180,41 @@ export function addAssetIndexPlugin(option: { mode: Mode }): Configuration[] {
         title: 'AddAssetIndexPlugin few blobs with asset specific options overriding generic options',
         outputDir: path.join(dist(option.mode), 'fewBlobsWithAssetOptions')
     });
+
+
+
+
+    const oneBlobWithAssetOptionOutputDir = new AddAssetIndexPlugin(
+        [ {
+            filepath: path.resolve(root, pathNormalize('assets/font/**/*.woff2')),
+            attributes: {
+                as: 'font',
+                rel: 'preload',
+            },
+            outputDir: (filepath: string) => {
+                const split = filepath.split('assets/font/');
+                const newpath = path.join('bust-cache-asset/font', split[ 1 ]);
+
+                return path.dirname(newpath);
+            }
+        },
+        ], {
+            root: root as any,
+            options: {
+                index: path.join(root, pathNormalize('src/index.html')),
+            },
+            webpackConfiguration: {
+                mode: option.mode
+            }
+        });
+
+
+    configs.push({
+        configuration: oneBlobWithAssetOptionOutputDir,
+        title: 'AddAssetIndexPlugin one blob with asset specific option outputDir',
+        outputDir: path.join(dist(option.mode), 'oneBlobWithAssetOptionOutputDir')
+    });
+
 
 
 

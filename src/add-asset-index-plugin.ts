@@ -3,31 +3,28 @@ import { IndexHtmlWebpackPluginOptions } from '@angular-devkit/build-angular/src
 import {
 	/* BuilderParameters, */ NormalizedCustomWebpackBrowserBuildSchema
 } from '../linked_modules/@mt/custom-webpack-builder-src/custom-webpack-builder';
+
 import * as path from 'path';
+import { isArray, isDefined } from '../linked_modules/@mt/browser-util/is';
+import { assignDefaultOption } from '../linked_modules/@mt/browser-util/assign';
 
 import { Compiler, Configuration as WebpackConfiguration } from 'webpack';
-
-import { isArray, isDefined } from '../linked_modules/@mt/util/is';
-
-// import micromatch from 'micromatch';
-
 import { Tap } from 'tapable';
 import { getSystemPath, Path } from '@angular-devkit/core';
-import { Asset, AssetOption } from './asset';
+import { Asset, AssetOption, AssetGlobalOption } from './asset';
 import { IndexWriter } from './index-writer';
 import { pluginName, Compilation } from './common';
-import { assignDefaultOption } from '../linked_modules/@mt/util/assign';
 
 
-export interface BuilderParametersOptions {
+export type BuilderParametersOptions = {
     index: NormalizedCustomWebpackBrowserBuildSchema[ 'index' ];
-    baseHref?: NormalizedCustomWebpackBrowserBuildSchema[ 'baseHref' ];
-    deployUrl?: NormalizedCustomWebpackBrowserBuildSchema[ 'deployUrl' ];
-    subresourceIntegrity?: NormalizedCustomWebpackBrowserBuildSchema[ 'subresourceIntegrity' ];
-    attributes?: AssetOption[ 'attributes' ];
-    place?: AssetOption[ 'place' ];
-    hash?: boolean;
-}
+    baseHref?: NormalizedCustomWebpackBrowserBuildSchema[ 'baseHref' ]; // not necessary. I will delete it certainely
+    // deployUrl?: NormalizedCustomWebpackBrowserBuildSchema[ 'deployUrl' ]; // already in AssetGlobalOption
+    subresourceIntegrity?: NormalizedCustomWebpackBrowserBuildSchema[ 'subresourceIntegrity' ]; // will be sri in AssetGlobalOption
+} & Pick<
+    AssetGlobalOption,
+    Exclude<keyof AssetGlobalOption, 'sri'>
+>;
 
 
 export interface BuilderParameters {
@@ -39,12 +36,7 @@ export interface BuilderParameters {
 export type AddAssetIndexPluginOptions = Pick<
     IndexHtmlWebpackPluginOptions,
     Exclude<keyof IndexHtmlWebpackPluginOptions, 'entrypoints' | 'noModuleEntrypoints'>
-> & {
-    attributes?: AssetOption[ 'attributes' ];
-    place?: AssetOption[ 'place' ];
-    hash?: boolean;
-    sri?: boolean;
-};
+> & AssetGlobalOption;
 
 export interface AssetResolved {
     asset: Asset;
@@ -70,7 +62,7 @@ export class AddAssetIndexPlugin {
     private getBuilderOptions(builderParameters: BuilderParameters): AddAssetIndexPluginOptions {
         const root = getSystemPath(builderParameters.root);
 
-        const { index, baseHref, deployUrl, subresourceIntegrity, hash, place, attributes } = builderParameters.options;
+        const { index, baseHref, deployUrl, subresourceIntegrity, hash, place, attributes, outputDir } = builderParameters.options;
 
         // copied from '@angular-devkit/build-angular/src/angular-cli-files/plugins/index-html-webpack-plugin'
         const buildOptions = {
@@ -94,7 +86,8 @@ export class AddAssetIndexPlugin {
             // My addition
             place,
             attributes,
-            hash: hash || builderParameters.webpackConfiguration.mode === 'production'
+            hash: hash || builderParameters.webpackConfiguration.mode === 'production',
+            outputDir
         };
 
 
@@ -163,3 +156,27 @@ export class AddAssetIndexPlugin {
         return assetsResolved;
     }
 }
+
+
+const root = path.resolve(__dirname, '../e2e');
+new AddAssetIndexPlugin(
+    [ {
+        filepath: path.resolve(root, '../e2e/assets/font/**/*.woff2'),
+        attributes: {
+            as: 'font',
+            rel: 'preload',
+        },
+        outputDir: (filepath: string) => {
+            const split = filepath.split('assets/font/');
+            return path.join('bust-cache-asset/font', split[ 1 ]);
+        }
+    } ],
+    {
+        root: root as any,
+        options: {
+            index: path.join(root, 'src/index.html'),
+        },
+        webpackConfiguration: {
+            mode: 'development'
+        }
+    });

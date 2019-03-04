@@ -16,7 +16,7 @@ const directories = {
 const commands = {
     compileProject: `npx tsc --project ${rootProject}`,
     compileWebpackConfigs: `npx tsc --project ${directories.webpackConfig}`,
-    runWebpack: mode => `npx webpack --mode ${mode} --config ${path.join(directories.webpackConfig, 'webpack-config.js')}`
+    runWebpack: mode => `npx webpack --mode ${mode} --config ${path.join(directories.webpackConfig, 'webpack.config.js')}`
 };
 
 

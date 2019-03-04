@@ -13,19 +13,8 @@ function commonWebpackConfiguration(option) {
             path: exports.dist(option.mode),
             filename: 'index_bundle.js',
         },
-        module: {
-            rules: [
-                {
-                    test: /\.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)$/,
-                    loader: 'file-loader',
-                    options: {
-                        name: `[name][hash].[ext]`,
-                    },
-                }
-            ],
-        },
         plugins: [
-            new CleanWebpackPlugin([exports.distRelative(option.mode)], { root: exports.root, verbose: true }),
+            new CleanWebpackPlugin([exports.distRelative(option.mode)], { root: exports.root, verbose: true })
         ],
     };
 }

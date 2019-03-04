@@ -3,11 +3,12 @@ import * as defaultTreeAdapter from 'parse5/lib/tree-adapters/default';
 import { RawSource, ReplaceSource } from 'webpack-sources';
 import { compilation } from 'webpack';
 import { AssetResolved } from './add-asset-index-plugin';
-import { isDefined, isUndefined, isNull, isNil } from '../linked_modules/@mt/util/is';
 import { LocationInIndex } from './asset';
 import { hash, HashOption } from './common';
-import { pathNormalize } from '../linked_modules/@mt/util/path-normalize';
 import { HtmlSerializer, SerializerOption } from './html-serializer';
+import { isDefined, isUndefined, isNull, isNil } from '../linked_modules/@mt/browser-util/is';
+import { pathNormalize } from '../linked_modules/@mt/node-util/path-normalize';
+
 
 type Compilation = compilation.Compilation;
 

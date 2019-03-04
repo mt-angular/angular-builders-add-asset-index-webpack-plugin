@@ -8,7 +8,7 @@ import { IndexWriter } from '../../src/index-writer';
 import { WebpackCompilationMock } from '../index-writer/webpack-compilation.mock';
 import { Compilation } from '../../src/common';
 import { Compiler } from 'webpack';
-import { ExecuteOnTempState } from '../../linked_modules/@mt/util/execute-temporary-state';
+import { ExecuteOnTempState } from '../../linked_modules/@mt/browser-util/execute-temporary-state';
 import { root, createAddAssetIndexPlugin, defaultAssetOption } from './add-asset-index-plugin.mock';
 
 

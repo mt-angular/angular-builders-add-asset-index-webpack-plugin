@@ -1,1 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
+@font-face {
+    font-family: 'Libre Franklin';
+    font-style: normal;
+    font-weight: 400;
+    src: url('font/libre-franklin/libre-franklin-v2-latin-400.eot');
+    src: local('Libre Franklin'), local('LibreFranklin-400'),
+         url('font/libre-franklin/libre-franklin-v2-latin-400.eot?#iefix') format('embedded-opentype'),
+         url('font/libre-franklin/libre-franklin-v2-latin-400.woff2') format('woff2'), 
+         url('font/libre-franklin/libre-franklin-v2-latin-400.woff') format('woff'), 
+         url('font/libre-franklin/libre-franklin-v2-latin-400.ttf') format('truetype'),
+         url('font/libre-franklin/libre-franklin-v2-latin-400.svg#LibreFranklin') format('svg'); 
+  }
+
+
+  .caca{
+    background: url("assets/img/football-player-bubble-blue.png") no-repeat;
+  }

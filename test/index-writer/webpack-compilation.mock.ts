@@ -1,5 +1,4 @@
 import { WebpackCompilation, ReadFileCallback } from '../webpack.mock';
-import { isDefined } from '../../linked_modules/@mt/util/is';
 import { indexHtmlMock } from './index.html.mock';
 
 export class MocksData {

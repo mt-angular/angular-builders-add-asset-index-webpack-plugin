@@ -1,11 +1,11 @@
 import * as path from 'path';
+import { assignRecursive } from '../../linked_modules/@mt/browser-util/assign';
+import { ExecuteOnTempState } from '../../linked_modules/@mt/browser-util/execute-temporary-state';
 import { WebpackCompilationMock } from '../index-writer/webpack-compilation.mock';
 import { AssetOption, Asset } from '../../src/asset';
 import { pluginName, hash } from '../../src/common';
-import { assignRecursive } from '../../linked_modules/@mt/util/assign';
 import { AssetPrivate } from './asset.private';
 import { WebpackCompilation } from '../webpack.mock';
-import { ExecuteOnTempState } from '../../linked_modules/@mt/util/execute-temporary-state';
 import { globbyMock } from './globby.mock';
 
 function createAsset(root: string = __dirname, option?: Partial<AssetOption>, noDefaultOption = false): AssetPrivate {

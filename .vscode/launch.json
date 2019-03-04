@@ -18,13 +18,30 @@
             "request": "launch",
             "name": "Launch Webpack Config",
             "program": "${workspaceFolder}/node_modules/.bin/webpack-cli",
-            "cwd": "${workspaceFolder}/e2e",
+            "cwd": "${workspaceFolder}/angular-test",
             "args": [
+                "--config",
+                "extra-webpack.config.js",
                 "--mode",
                 "development"
             ],
             "outFiles": [
-                "${workspaceFolder}/dist/**/*.js"
+                "${workspaceFolder}/dist/**/*.js",
+                "${workspaceFolder}/angular-test/dist/**/*.js"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Angular Config",
+            "program": "${workspaceFolder}/angular-test/node_modules/.bin/ng",
+            "cwd": "${workspaceFolder}/angular-test",
+            "args": [
+                "build"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js",
+                "${workspaceFolder}/angular-test/dist/**/*.js"
             ]
         },
         {

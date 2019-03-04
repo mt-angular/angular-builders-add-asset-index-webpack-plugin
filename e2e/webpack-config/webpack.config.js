@@ -16,4 +16,4 @@ function webpackConfig(env, argv) {
 }
 exports.default = webpackConfig;
 // export = webpackConfig;
-//# sourceMappingURL=webpack-config.js.map
+//# sourceMappingURL=webpack.config.js.map
