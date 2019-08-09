@@ -101,11 +101,6 @@ describe('Test suite for AddAssetIndexPlugin', () => {
         }
 
         async function createIndexWriteMockTemp(asyncCallback: () => void) {
-            /* const writeInIndexOriginal = IndexWriter.prototype.writeInIndex;
-            IndexWriter.prototype.writeInIndex = jest.fn();
-
-            await asyncCallback();
-            IndexWriter.prototype.writeInIndex = writeInIndexOriginal; */
             new ExecuteOnTempState().state({ obj: IndexWriter.prototype, tmpState: { writeInIndex: jest.fn() } })
                 .execute(async () => await asyncCallback());
         }

@@ -24,6 +24,7 @@ export interface IndexWriterPrivate {
     appendLinkToFragment(place: LocationInIndex, link: parse5.DefaultTreeElement);
     insertFragmentsInIndex(): void;
     readFile(): Promise<string>;
+    getInputContent(): string;
     generateSriAttributes(content: string, algo?: string): { name: string; value: string }[];
     serializeHtml(node: parse5.Node, options: SerializerOption): string;
 }

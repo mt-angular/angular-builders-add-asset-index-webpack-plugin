@@ -119,6 +119,10 @@ export class AddAssetIndexPlugin {
         // it is a mistake. Here it should be just a Partial. In Tap, it is missing even before
         // check source code https://github.com/webpack/tapable/blob/master/lib/Hook.js
         compiler.hooks.emit.tapPromise(tapOption as Tap, async (compilation: Compilation) => {
+            if (compilation.assets[ this.option.output ] === undefined)
+                throw new Error(`AddAssetIndexPlugin can not be used before index.html has been emited by another plugin. In angular, the plugin is:
+                 angular-cli/packages/angular_devkit/build_angular/src/angular-cli-files/plugins/index-html-webpack-plugin.ts`);
+
             await this.handleEmit(compilation);
         });
     }
@@ -133,7 +137,7 @@ export class AddAssetIndexPlugin {
         });
 
         const assetsResolved = await this.addAllAssetsToCompilation();
-        await this.indexWriter.writeInIndex(assetsResolved);
+        this.indexWriter.writeInIndex(assetsResolved);
     }
 
     async addAllAssetsToCompilation(): Promise<AssetResolved[]> {
@@ -156,27 +160,3 @@ export class AddAssetIndexPlugin {
         return assetsResolved;
     }
 }
-
-
-const root = path.resolve(__dirname, '../e2e');
-new AddAssetIndexPlugin(
-    [ {
-        filepath: path.resolve(root, '../e2e/assets/font/**/*.woff2'),
-        attributes: {
-            as: 'font',
-            rel: 'preload',
-        },
-        outputDir: (filepath: string) => {
-            const split = filepath.split('assets/font/');
-            return path.join('bust-cache-asset/font', split[ 1 ]);
-        }
-    } ],
-    {
-        root: root as any,
-        options: {
-            index: path.join(root, 'src/index.html'),
-        },
-        webpackConfiguration: {
-            mode: 'development'
-        }
-    });

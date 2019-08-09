@@ -22,7 +22,7 @@ export type OutputPath = string | OutputPathCallback;
 export class AssetGlobalOption {
     deployUrl?: string = ''; // to overwrite BuilderParametersOption.deployUrl
     sri?: boolean = false; // to overwrite BuilderParametersOption.subresourceIntegrity
-    attributes?: { [ atrributeName: string ]: string } = {};
+    attributes?: { [ atrributeName: string ]: string | boolean } = {};
     hash?: boolean = false;
     place?: LocationInIndex = 'head';
     outputDir?: OutputPath = undefined;

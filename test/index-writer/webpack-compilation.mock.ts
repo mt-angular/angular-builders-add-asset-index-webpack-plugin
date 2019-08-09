@@ -1,26 +1,30 @@
 import { WebpackCompilation, ReadFileCallback } from '../webpack.mock';
 import { indexHtmlMock } from './index.html.mock';
+import { IndexWriterOption } from '../../src/index-writer';
+import { assignDefaultOption } from '../../linked_modules/@mt/browser-util/assign';
 
 export class MocksData {
-    readFileContent?: string | Error = indexHtmlMock;
+    assetOutputContent?: string = indexHtmlMock;
 }
 
 export class WebpackCompilationMock {
     compilation = new WebpackCompilation();
 
-    constructor() { }
+    constructor(private indexWriterOption?: IndexWriterOption) {
+        this.indexWriterOption = assignDefaultOption(new IndexWriterOption(), indexWriterOption as IndexWriterOption);
+    }
 
     init(mocksData: MocksData = {}) {
         const mocks = { ...new MocksData(), ...mocksData };
 
-        this.createReadFileMock(mocks.readFileContent);
+        this.createReadFileMock(mocks.assetOutputContent);
 
         return this;
     }
 
-    createReadFileMock(content: string | Error) {
+    createReadFileMock(content: string) {
 
-        const readFileMock = jest.fn((input: string, callback: ReadFileCallback) => {
+        /* const readFileMock = jest.fn((input: string, callback: ReadFileCallback) => {
             if (content instanceof Error) {
                 callback(content, undefined);
             }
@@ -30,6 +34,12 @@ export class WebpackCompilationMock {
 
         this.compilation.inputFileSystem.readFile = readFileMock;
 
-        return readFileMock;
+        return readFileMock; */
+        const bufferContent = Buffer.from(content);
+
+        this.compilation.assets[ this.indexWriterOption.indexOutputPath ] = {
+            source: () => bufferContent,
+            size: () => bufferContent.length
+        };
     }
 }

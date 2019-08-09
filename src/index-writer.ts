@@ -1,16 +1,13 @@
 import * as parse5 from 'parse5';
 import * as defaultTreeAdapter from 'parse5/lib/tree-adapters/default';
 import { RawSource, ReplaceSource } from 'webpack-sources';
-import { compilation } from 'webpack';
 import { AssetResolved } from './add-asset-index-plugin';
 import { LocationInIndex } from './asset';
-import { hash, HashOption } from './common';
+import { hash, HashOption, Compilation } from './common';
 import { HtmlSerializer, SerializerOption } from './html-serializer';
 import { isDefined, isUndefined, isNull, isNil } from '../linked_modules/@mt/browser-util/is';
 import { pathNormalize } from '../linked_modules/@mt/node-util/path-normalize';
 
-
-type Compilation = compilation.Compilation;
 
 export class FragmentData {
     location: number = undefined;
@@ -35,8 +32,8 @@ export class IndexWriter {
         this.option = Object.assign(new IndexWriterOption(), option);
     }
 
-    public async init() {
-        const indexContent = await this.readFile();
+    public init() {
+        const indexContent = this.getInputContent(); // await this.readFile();
 
         const document = parse5.parse(indexContent, { treeAdapter: defaultTreeAdapter, sourceCodeLocationInfo: true }) as parse5.DefaultTreeDocument;
 
@@ -83,10 +80,10 @@ export class IndexWriter {
     }
 
 
-    public async writeInIndex(assetResolved: AssetResolved[]) {
+    public writeInIndex(assetResolved: AssetResolved[]) {
         if (!this.initDone) {
             this.initDone = true;
-            await this.init();
+            this.init();
         }
 
         for (const resolved of assetResolved) {
@@ -120,7 +117,7 @@ export class IndexWriter {
         if (attributes) {
             // can be { name: 'rel', value: 'preload' }, { name: 'as', value: 'font' },
             for (const [ name, value ] of Object.entries(attributes))
-                attrs.push({ name, value });
+                attrs.push({ name, value: value as any }); // value can be string or boolean but the typing does not match my html-serializer
         }
 
         const link: parse5.DefaultTreeElement = defaultTreeAdapter.createElement('link', undefined, attrs);
@@ -194,6 +191,10 @@ export class IndexWriter {
         });
     }
 
+    private getInputContent(): string {
+        const asset: { source: () => Buffer } = this.compilation.assets[ this.option.indexOutputPath ];
+        return asset.source().toString();
+    }
 
     private generateSriAttributes(content: string, hashOption?: HashOption): { name: string; value: string }[] {
         const hashOpt = Object.assign({ algo: 'sha384', digest: 'base64' }, hashOption);

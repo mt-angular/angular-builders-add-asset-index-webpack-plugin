@@ -4,6 +4,8 @@
     "main": "dist",
     "license": "MIT",
     "scripts": {
+        "clean": "shx rm -r dist",
+        "prebuild": "yarn clean",
         "postbuild": "yarn all-test",
         "build": "rm -R dist && tsc",
         "all-test": "yarn test && yarn e2e",
@@ -11,7 +13,9 @@
         "e2e": "yarn e2e-plain-webpack && yarn e2e-angular",
         "e2e-plain-webpack": "jest --config jest-e2e-plainwebpack.config.js",
         "e2e-angular": "jest --config jest-e2e-angular.config.js",
-        "set-follow-symlinks-watcher": "sed -i 's/followSymlinks: false/followSymlinks: true/g' node_modules/watchpack/lib/DirectoryWatcher.js"
+        "set-follow-symlinks-watcher": "sed -i 's/followSymlinks: false/followSymlinks: true/g' node_modules/watchpack/lib/DirectoryWatcher.js",
+        "push": "npm version patch && git push && git push --tags",
+        "publish": "tsc && npm publish --access public"
     },
     "devDependencies": {
         "@angular-devkit/build-angular": "^0.13.3",
