@@ -1,7 +1,6 @@
 import { AssetOption } from '../../src/asset';
 import { Path } from '@angular-devkit/core';
 import { Compilation } from '../../src/common';
-import * as fs from 'fs';
 
 
 export interface AssetPrivate {

@@ -7,6 +7,8 @@
         "**/*.spec.ts"
     ],
     "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
         // "baseUrl": "./",
         "moduleResolution": "node",
         // "outDir": "dist",

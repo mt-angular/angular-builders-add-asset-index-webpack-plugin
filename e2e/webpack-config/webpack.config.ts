@@ -1,15 +1,14 @@
 import { commonWebpackConfiguration } from './webpack.common';
-import { addAssetIndexPlugin } from './add-asset-index-plugin-configurations';
+import { addAssetIndexPluginList } from './add-asset-index-plugin-configurations';
+import { Configuration as WebpackConfiguration } from 'webpack';
 // I use util-dist instead of util because in this tsconfig I didn't put a outDir, then it would compile close to the original file
-import { PlainObj } from '../../linked_modules/@mt/browser-util-dist/type';
-import { Configuration } from 'webpack';
-
+import { PlainObj } from '@upradata/browser-util';
 
 /* export */ // const webpackConfig = {
-export default function webpackConfig(env: PlainObj, argv: PlainObj) {
+export default function webpackConfig(env: PlainObj, argv: PlainObj): WebpackConfiguration[] {
 
-    const AddAssetIndexPluginConfigs = addAssetIndexPlugin(argv as any);
-    const webpackConfigs: Configuration[] = [];
+    const AddAssetIndexPluginConfigs = addAssetIndexPluginList(argv as any);
+    const webpackConfigs: WebpackConfiguration[] = [];
 
 
     for (const config of AddAssetIndexPluginConfigs) {

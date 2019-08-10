@@ -2,7 +2,7 @@ import { WebpackCompilation } from '../webpack.mock';
 import { IndexWriterOption, FragmentData } from '../../src/index-writer';
 import { AssetResolved } from '../../src/add-asset-index-plugin';
 import { LocationInIndex } from '../../src/asset';
-import * as parse5 from 'parse5';
+import  parse5 from 'parse5';
 import { ReplaceSource } from 'webpack-sources';
 import { SerializerOption } from '../../src/html-serializer';
 

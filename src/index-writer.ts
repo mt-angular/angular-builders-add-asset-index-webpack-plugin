@@ -1,12 +1,12 @@
-import * as parse5 from 'parse5';
-import * as defaultTreeAdapter from 'parse5/lib/tree-adapters/default';
+import parse5 from 'parse5';
+import defaultTreeAdapter from 'parse5/lib/tree-adapters/default';
 import { RawSource, ReplaceSource } from 'webpack-sources';
 import { AssetResolved } from './add-asset-index-plugin';
 import { LocationInIndex } from './asset';
 import { hash, HashOption, Compilation } from './common';
 import { HtmlSerializer, SerializerOption } from './html-serializer';
-import { isDefined, isUndefined, isNull, isNil } from '../linked_modules/@mt/browser-util/is';
-import { pathNormalize } from '../linked_modules/@mt/node-util/path-normalize';
+import { isDefined, isUndefined, isNull, isNil } from '@upradata/browser-util';
+import { pathNormalize } from '@upradata/node-util';
 
 
 export class FragmentData {

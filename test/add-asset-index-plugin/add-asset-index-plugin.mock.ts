@@ -1,10 +1,9 @@
-import * as path from 'path';
+import  path from 'path';
 import { AssetOption } from '../../src/asset';
 import { BuilderParameters, AddAssetIndexPlugin, BuilderParametersOptions } from '../../src/add-asset-index-plugin';
 import { AddAssetIndexPluginPrivate } from './add-asset-index-plugin.private';
-import { isDefined, isArray } from '../../linked_modules/@mt/browser-util/is';
-import { assignRecursive } from '../../linked_modules/@mt/browser-util/assign';
-import { PartialRecursive } from '../../linked_modules/@mt/browser-util/type';
+import { isDefined, isArray, assignRecursive, PartialRecursive } from '@upradata/browser-util';
+
 
 export interface CreateOptionParam<T> {
     param: PartialRecursive<T>;
@@ -13,9 +12,9 @@ export interface CreateOptionParam<T> {
 
 
 export const root = '/path/to/root';
-export const defaultAssetOption = { filepath: 'assets/font/**/*.woff2' };
-export const defaultBuilderOption = {
-    options: {
+export const defaultAssetOption: AssetOption = { filepath: 'assets/font/**/*.woff2' };
+export const defaultBuilderOption: Partial<BuilderParameters> = {
+    buildOptions: {
         index: path.join(root, 'src/index.html'),
         subresourceIntegrity: false,
         baseHref: undefined as string,
@@ -23,7 +22,7 @@ export const defaultBuilderOption = {
         place: 'head',
         hash: false
     },
-    webpackConfiguration: {
+    baseWebpackConfig: {
         mode: 'development'
     }
 };

@@ -1,6 +1,6 @@
 import { HtmlSerializer, SerializerClass } from '../src/html-serializer';
-import * as Parse5Serializer from 'parse5/lib/serializer';
-import * as defaultTreeAdapter from 'parse5/lib/tree-adapters/default';
+import Parse5Serializer from 'parse5/lib/serializer';
+import defaultTreeAdapter from 'parse5/lib/tree-adapters/default';
 
 
 describe('Test suite for html-serializer', () => {

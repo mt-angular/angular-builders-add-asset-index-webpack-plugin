@@ -4,7 +4,7 @@ const webpack_common_1 = require("./webpack.common");
 const add_asset_index_plugin_configurations_1 = require("./add-asset-index-plugin-configurations");
 /* export */ // const webpackConfig = {
 function webpackConfig(env, argv) {
-    const AddAssetIndexPluginConfigs = add_asset_index_plugin_configurations_1.addAssetIndexPlugin(argv);
+    const AddAssetIndexPluginConfigs = add_asset_index_plugin_configurations_1.addAssetIndexPluginList(argv);
     const webpackConfigs = [];
     for (const config of AddAssetIndexPluginConfigs) {
         const webpackConfiguration = webpack_common_1.commonWebpackConfiguration(argv);

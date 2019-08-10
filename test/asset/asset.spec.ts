@@ -1,6 +1,5 @@
-import * as path from 'path';
-import { assignRecursive } from '../../linked_modules/@mt/browser-util/assign';
-import { ExecuteOnTempState } from '../../linked_modules/@mt/browser-util/execute-temporary-state';
+import  path from 'path';
+import { assignRecursive, ExecuteOnTempState } from '@upradata/browser-util';
 import { WebpackCompilationMock } from '../index-writer/webpack-compilation.mock';
 import { AssetOption, Asset } from '../../src/asset';
 import { pluginName, hash } from '../../src/common';
@@ -140,7 +139,7 @@ describe('Test suite for Asset', () => {
                 const asset = createAsset();
 
                 const filepath = 'anyfile.png';
-                const a = await asset.addFileToWebpackAssets(filepath);
+                await asset.addFileToWebpackAssets(filepath);
 
 
                 const compilation: WebpackCompilation = asset.compilation as any;

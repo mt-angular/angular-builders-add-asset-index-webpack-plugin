@@ -2,11 +2,10 @@
 import { IndexHtmlWebpackPluginOptions } from '@angular-devkit/build-angular/src/angular-cli-files/plugins/index-html-webpack-plugin';
 import {
 	/* BuilderParameters, */ NormalizedCustomWebpackBrowserBuildSchema
-} from '../linked_modules/@mt/custom-webpack-builder-src/custom-webpack-builder';
+} from '@ud-angular-builders/custom-webpack-7';
 
-import * as path from 'path';
-import { isArray, isDefined } from '../linked_modules/@mt/browser-util/is';
-import { assignDefaultOption } from '../linked_modules/@mt/browser-util/assign';
+import path from 'path';
+import { isArray, isDefined, assignDefaultOption } from '@upradata/browser-util';
 
 import { Compiler, Configuration as WebpackConfiguration } from 'webpack';
 import { Tap } from 'tapable';
@@ -16,27 +15,23 @@ import { IndexWriter } from './index-writer';
 import { pluginName, Compilation } from './common';
 
 
+// We need only these properties. Not all angular.json builder configuration
 export type BuilderParametersOptions = {
     index: NormalizedCustomWebpackBrowserBuildSchema[ 'index' ];
     baseHref?: NormalizedCustomWebpackBrowserBuildSchema[ 'baseHref' ]; // not necessary. I will delete it certainely
     // deployUrl?: NormalizedCustomWebpackBrowserBuildSchema[ 'deployUrl' ]; // already in AssetGlobalOption
     subresourceIntegrity?: NormalizedCustomWebpackBrowserBuildSchema[ 'subresourceIntegrity' ]; // will be sri in AssetGlobalOption
-} & Pick<
-    AssetGlobalOption,
-    Exclude<keyof AssetGlobalOption, 'sri'>
->;
+} & Omit<AssetGlobalOption, 'sri'>;
 
 
+// We need only these properties. Not all @ud-angular-builders/custom-webpack-7 BuilderParameters
 export interface BuilderParameters {
     root: Path;
-    options: BuilderParametersOptions;
-    webpackConfiguration: { mode: WebpackConfiguration[ 'mode' ] };
+    buildOptions: BuilderParametersOptions;
+    baseWebpackConfig: { mode: WebpackConfiguration[ 'mode' ] };
 }
 
-export type AddAssetIndexPluginOptions = Pick<
-    IndexHtmlWebpackPluginOptions,
-    Exclude<keyof IndexHtmlWebpackPluginOptions, 'entrypoints' | 'noModuleEntrypoints'>
-> & AssetGlobalOption;
+export type AddAssetIndexPluginOptions = Omit<IndexHtmlWebpackPluginOptions, 'entrypoints' | 'noModuleEntrypoints'> & AssetGlobalOption;
 
 export interface AssetResolved {
     asset: Asset;
@@ -62,7 +57,7 @@ export class AddAssetIndexPlugin {
     private getBuilderOptions(builderParameters: BuilderParameters): AddAssetIndexPluginOptions {
         const root = getSystemPath(builderParameters.root);
 
-        const { index, baseHref, deployUrl, subresourceIntegrity, hash, place, attributes, outputDir } = builderParameters.options;
+        const { index, baseHref, deployUrl, subresourceIntegrity, hash, place, attributes, outputDir } = builderParameters.buildOptions;
 
         // copied from '@angular-devkit/build-angular/src/angular-cli-files/plugins/index-html-webpack-plugin'
         const buildOptions = {
@@ -86,7 +81,7 @@ export class AddAssetIndexPlugin {
             // My addition
             place,
             attributes,
-            hash: hash || builderParameters.webpackConfiguration.mode === 'production',
+            hash: hash || builderParameters.baseWebpackConfig.mode === 'production',
             outputDir
         };
 
@@ -104,7 +99,7 @@ export class AddAssetIndexPlugin {
     initAssets() {
         this.assets = this.assetsOption.map(
             // merge global option with individual asset option
-            option => new Asset(this.compilation, this.root, assignDefaultOption(this.option, option))
+            option => new Asset(this.compilation, this.root, assignDefaultOption(this.option as unknown as AssetOption, option))
         );
     }
 

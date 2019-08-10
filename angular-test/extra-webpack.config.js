@@ -1,6 +1,6 @@
 // const webpack = require('webpack');
 const path = require('path');
-const { AddAssetIndexPlugin } = require('../dist/src/add-asset-index-plugin');
+const { AddAssetIndexPlugin } = require('../dist/add-asset-index-plugin');
 
 
 console.log('Extra Webpack : Thomas Milotti :)');
@@ -34,12 +34,12 @@ module.exports = (builderParameters) => {
                 {
                     // filepath: 'src/font/**/*.woff2',
                     filepath: 'src/font/**/*.woff2',
-                    /* attributes: {
+                    attributes: {
                         as: 'font',
                         rel: 'preload',
-                        speed: 'super-fast'
+                        // speed: 'super-fast'
                     },
-                    deployUrl: 'public/deploy/libre-franklin',
+                    /* deployUrl: 'public/deploy/libre-franklin',
                     hash: true,
                     place: 'head',
                     sri: true */
@@ -47,6 +47,7 @@ module.exports = (builderParameters) => {
                         const split = filepath.split('src/font/');
                         const newpath = path.join('assets/bust-cached-font', split[1]);
 
+                        console.log(filepath, newpath);
                         return path.dirname(newpath);
                     }
                 }

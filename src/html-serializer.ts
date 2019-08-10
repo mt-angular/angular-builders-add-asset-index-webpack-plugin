@@ -1,6 +1,6 @@
-import * as Parse5Serializer from 'parse5/lib/serializer';
+import Parse5Serializer from 'parse5/lib/serializer';
 import { TreeAdapter, Node } from 'parse5';
-import * as HTML from 'parse5/lib/common/html';
+import HTML from 'parse5/lib/common/html';
 
 const NS = HTML.NAMESPACES;
 

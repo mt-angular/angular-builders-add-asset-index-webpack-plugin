@@ -4,7 +4,7 @@ import { hash } from '../../src/common';
 import { IndexWriterPrivate } from './index-writer.private';
 import { WebpackCompilationMock, MocksData } from './webpack-compilation.mock';
 import { assetResolved, assetsResolved } from './asset-resolved.mock';
-import { assignDefaultOption } from '../../linked_modules/@mt/browser-util/assign';
+import { assignDefaultOption } from '@upradata/browser-util';
 
 
 function createIndexWriter(compilation: WebpackCompilation, option: IndexWriterOption): IndexWriterPrivate {

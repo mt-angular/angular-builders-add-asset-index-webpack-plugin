@@ -1,7 +1,7 @@
-import { WebpackCompilation, ReadFileCallback } from '../webpack.mock';
+import { WebpackCompilation } from '../webpack.mock';
 import { indexHtmlMock } from './index.html.mock';
 import { IndexWriterOption } from '../../src/index-writer';
-import { assignDefaultOption } from '../../linked_modules/@mt/browser-util/assign';
+import { assignDefaultOption } from '@upradata/browser-util';
 
 export class MocksData {
     assetOutputContent?: string = indexHtmlMock;

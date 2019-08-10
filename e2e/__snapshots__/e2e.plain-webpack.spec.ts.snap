@@ -17,30 +17,7 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
 
 <body>
     <app-root class=\\"mt mat-typography\\"></app-root>
-</body>
-
-</html>
-"
-`;
-
-exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = development End2End Snapshot index.html: AddAssetIndexPlugin default parameters with few blobs 2`] = `
-"<!doctype html>
-<html lang=\\"fr\\">
-
-<head>
-    <meta charset=\\"utf-8\\">
-    <title>IFA</title>
-    <base href=\\"/\\">
-
-    <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1, user-scalable=no\\">
-    <link rel=\\"icon\\" type=\\"image/x-icon\\" href=\\"favicon.ico\\">
-
-
-<link href=\\"assets/font/libre-franklin/libre-franklin-v2-latin-400.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-300.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-400.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-500.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-700.woff2\\"></head>
-
-<body>
-    <app-root class=\\"mt mat-typography\\"></app-root>
-</body>
+<script type=\\"text/javascript\\" src=\\"index_bundle.js\\"></script></body>
 
 </html>
 "
@@ -63,13 +40,36 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
 
 <body>
     <app-root class=\\"mt mat-typography\\"></app-root>
-</body>
+<script type=\\"text/javascript\\" src=\\"index_bundle.js\\"></script></body>
 
 </html>
 "
 `;
 
-exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = development End2End Snapshot index.html: AddAssetIndexPlugin few blobs with asset specific options overriding generic options 1`] = `
+exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = development End2End Snapshot index.html: AddAssetIndexPlugin default parameters with one blob 1`] = `
+"<!doctype html>
+<html lang=\\"fr\\">
+
+<head>
+    <meta charset=\\"utf-8\\">
+    <title>IFA</title>
+    <base href=\\"/\\">
+
+    <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1, user-scalable=no\\">
+    <link rel=\\"icon\\" type=\\"image/x-icon\\" href=\\"favicon.ico\\">
+
+
+<link href=\\"assets/font/libre-franklin/libre-franklin-v2-latin-400.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-300.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-400.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-500.woff2\\"><link href=\\"assets/font/rubik/rubik-v7-latin-700.woff2\\"></head>
+
+<body>
+    <app-root class=\\"mt mat-typography\\"></app-root>
+<script type=\\"text/javascript\\" src=\\"index_bundle.js\\"></script></body>
+
+</html>
+"
+`;
+
+exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = development End2End Snapshot index.html: AddAssetIndexPlugin few blobs with asset specific buildOptions overriding generic buildOptions 1`] = `
 "<!doctype html>
 <html lang=\\"fr\\">
 
@@ -86,7 +86,7 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
 
 <body>
     <app-root class=\\"mt mat-typography\\"></app-root>
-<link href=\\"public/deploy/rubik/assets/font/rubik/rubik-v7-latin-300.woff2\\" as=\\"font\\" rel=\\"preload\\" network=\\"global\\" speed=\\"super-fast\\"><link href=\\"public/deploy/rubik/assets/font/rubik/rubik-v7-latin-400.woff2\\" as=\\"font\\" rel=\\"preload\\" network=\\"global\\" speed=\\"super-fast\\"><link href=\\"public/deploy/rubik/assets/font/rubik/rubik-v7-latin-500.woff2\\" as=\\"font\\" rel=\\"preload\\" network=\\"global\\" speed=\\"super-fast\\"><link href=\\"public/deploy/rubik/assets/font/rubik/rubik-v7-latin-700.woff2\\" as=\\"font\\" rel=\\"preload\\" network=\\"global\\" speed=\\"super-fast\\"></body>
+<script type=\\"text/javascript\\" src=\\"index_bundle.js\\"></script><link href=\\"public/deploy/rubik/assets/font/rubik/rubik-v7-latin-300.woff2\\" as=\\"font\\" rel=\\"preload\\" network=\\"global\\" speed=\\"super-fast\\"><link href=\\"public/deploy/rubik/assets/font/rubik/rubik-v7-latin-400.woff2\\" as=\\"font\\" rel=\\"preload\\" network=\\"global\\" speed=\\"super-fast\\"><link href=\\"public/deploy/rubik/assets/font/rubik/rubik-v7-latin-500.woff2\\" as=\\"font\\" rel=\\"preload\\" network=\\"global\\" speed=\\"super-fast\\"><link href=\\"public/deploy/rubik/assets/font/rubik/rubik-v7-latin-700.woff2\\" as=\\"font\\" rel=\\"preload\\" network=\\"global\\" speed=\\"super-fast\\"></body>
 
 </html>
 "
@@ -109,13 +109,13 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
 
 <body>
     <app-root class=\\"mt mat-typography\\"></app-root>
-</body>
+<script type=\\"text/javascript\\" src=\\"index_bundle.js\\"></script></body>
 
 </html>
 "
 `;
 
-exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = development End2End Snapshot index.html: AddAssetIndexPlugin one blob with generic options 1`] = `
+exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = development End2End Snapshot index.html: AddAssetIndexPlugin one blob with generic buildOptions 1`] = `
 "<!doctype html>
 <html lang=\\"fr\\">
 
@@ -132,7 +132,7 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
 
 <body>
     <app-root class=\\"mt mat-typography\\"></app-root>
-</body>
+<script type=\\"text/javascript\\" src=\\"index_bundle.js\\"></script></body>
 
 </html>
 "
@@ -155,7 +155,7 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
 
 <body>
     <app-root class=\\"mt mat-typography\\"></app-root>
-</body>
+<script type=\\"text/javascript\\" src=\\"index_bundle.js\\"></script></body>
 
 </html>
 "
@@ -178,7 +178,7 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
 
 <body>
     <app-root class=\\"mt mat-typography\\"></app-root>
-</body>
+<script type=\\"text/javascript\\" src=\\"index_bundle.js\\"></script></body>
 
 </html>
 "
@@ -201,13 +201,13 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
 
 <body>
     <app-root class=\\"mt mat-typography\\"></app-root>
-</body>
+<script type=\\"text/javascript\\" src=\\"index_bundle.js\\"></script></body>
 
 </html>
 "
 `;
 
-exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = production End2End Snapshot index.html: AddAssetIndexPlugin few blobs with asset specific options overriding generic options 1`] = `
+exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = production End2End Snapshot index.html: AddAssetIndexPlugin few blobs with asset specific buildOptions overriding generic buildOptions 1`] = `
 "<!doctype html>
 <html lang=\\"fr\\">
 
@@ -224,7 +224,7 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
 
 <body>
     <app-root class=\\"mt mat-typography\\"></app-root>
-<link href=\\"public/deploy/rubik/assets/font/rubik/rubik-v7-latin-300.eb02199844b4e2a0871c.woff2\\" as=\\"font\\" rel=\\"preload\\" network=\\"global\\" speed=\\"super-fast\\"><link href=\\"public/deploy/rubik/assets/font/rubik/rubik-v7-latin-400.1ecc21093d3c8aa44b3e.woff2\\" as=\\"font\\" rel=\\"preload\\" network=\\"global\\" speed=\\"super-fast\\"><link href=\\"public/deploy/rubik/assets/font/rubik/rubik-v7-latin-500.d3fd715f234b8dcdd09d.woff2\\" as=\\"font\\" rel=\\"preload\\" network=\\"global\\" speed=\\"super-fast\\"><link href=\\"public/deploy/rubik/assets/font/rubik/rubik-v7-latin-700.9aff6f99df5790ad5dbd.woff2\\" as=\\"font\\" rel=\\"preload\\" network=\\"global\\" speed=\\"super-fast\\"></body>
+<script type=\\"text/javascript\\" src=\\"index_bundle.js\\"></script><link href=\\"public/deploy/rubik/assets/font/rubik/rubik-v7-latin-300.eb02199844b4e2a0871c.woff2\\" as=\\"font\\" rel=\\"preload\\" network=\\"global\\" speed=\\"super-fast\\"><link href=\\"public/deploy/rubik/assets/font/rubik/rubik-v7-latin-400.1ecc21093d3c8aa44b3e.woff2\\" as=\\"font\\" rel=\\"preload\\" network=\\"global\\" speed=\\"super-fast\\"><link href=\\"public/deploy/rubik/assets/font/rubik/rubik-v7-latin-500.d3fd715f234b8dcdd09d.woff2\\" as=\\"font\\" rel=\\"preload\\" network=\\"global\\" speed=\\"super-fast\\"><link href=\\"public/deploy/rubik/assets/font/rubik/rubik-v7-latin-700.9aff6f99df5790ad5dbd.woff2\\" as=\\"font\\" rel=\\"preload\\" network=\\"global\\" speed=\\"super-fast\\"></body>
 
 </html>
 "
@@ -247,13 +247,13 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
 
 <body>
     <app-root class=\\"mt mat-typography\\"></app-root>
-</body>
+<script type=\\"text/javascript\\" src=\\"index_bundle.js\\"></script></body>
 
 </html>
 "
 `;
 
-exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = production End2End Snapshot index.html: AddAssetIndexPlugin one blob with generic options 1`] = `
+exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = production End2End Snapshot index.html: AddAssetIndexPlugin one blob with generic buildOptions 1`] = `
 "<!doctype html>
 <html lang=\\"fr\\">
 
@@ -270,7 +270,7 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
 
 <body>
     <app-root class=\\"mt mat-typography\\"></app-root>
-</body>
+<script type=\\"text/javascript\\" src=\\"index_bundle.js\\"></script></body>
 
 </html>
 "

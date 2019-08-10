@@ -1,5 +1,5 @@
-import { addAssetIndexPlugin } from './webpack-config/add-asset-index-plugin-configurations';
-import * as path from 'path';
+import { addAssetIndexPluginList } from './webpack-config/add-asset-index-plugin-configurations';
+import path from 'path';
 import { execSyncCommand, readFileAsync } from './util';
 
 
@@ -11,6 +11,7 @@ const directories = {
     root: rootProject,
     dist: path.join(__dirname, 'dist')
 };
+
 
 
 const commands = {
@@ -38,7 +39,7 @@ for (const mode of modes) {
     console.log('Execute Webpack', commands.runWebpack(mode));
     execSyncCommand(commands.runWebpack(mode));
 
-    const webpackConfigurations = addAssetIndexPlugin({ mode });
+    const webpackConfigurations = addAssetIndexPluginList({ mode });
     configs[ mode ] = webpackConfigurations.map(config => [ config.title, config.outputDir ]);
 }
 

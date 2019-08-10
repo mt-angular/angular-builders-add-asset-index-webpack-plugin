@@ -60,18 +60,30 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "TS Jest Tests",
-            "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+            "name": "UT Tests",
+            "program": "${workspaceRoot}/node_modules/.bin/jest",
+            "outFiles": [
+                "${workspaceRoot}/dist"
+            ],
             "args": [
                 "--config",
                 "jest-ut.config.js",
-                "--runInBand",
-                "test/index-writer/index-writer.spec.ts"
+                "--runInBand"
             ],
-            "runtimeArgs": [
-                "--nolazy",
-                "-r",
-                "ts-node/register"
+            "console": "internalConsole"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "E2E Tests",
+            "outFiles": [
+                "${workspaceRoot}/dist"
+            ],
+            "program": "${workspaceRoot}/node_modules/.bin/jest",
+            "args": [
+                "--config",
+                "jest-e2e-plainwebpack.config.js",
+                "--runInBand"
             ],
             "console": "internalConsole"
         },

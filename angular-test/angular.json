@@ -17,7 +17,7 @@
                     // 2nd option: We leave builders.json in the root of the custom-webpack project but we must use install-local using underground
                     // npm pack & npm install to have an install of the project with .npmignore and package.json[files] taken into account to put just
                     // the production project content
-                    "builder": "@mt-angular-builders/custom-webpack:browser",
+                    "builder": "@ud-angular-builders/custom-webpack-7:browser",
                     // "builder": "@angular-devkit/build-angular:browser",
                     "options": {
                         "customWebpackConfig": {

@@ -1,4 +1,4 @@
-import * as path from 'path';
+import  path from 'path';
 
 export function globbyMock(filepath: string) {
     const split = filepath.split('**');

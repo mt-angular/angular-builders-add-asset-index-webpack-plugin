@@ -10,10 +10,10 @@ exports[`Angular test suite snapshots: angular.json set with architect.build.bui
 
   <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1\\">
   <link rel=\\"icon\\" type=\\"image/x-icon\\" href=\\"favicon.ico\\">
-<link href=\\"src/assets/font/libre-franklin/libre-franklin-v2-latin-400.woff2\\"><link href=\\"src/assets/font/rubik/rubik-v7-latin-300.woff2\\"><link href=\\"src/assets/font/rubik/rubik-v7-latin-400.woff2\\"><link href=\\"src/assets/font/rubik/rubik-v7-latin-500.woff2\\"><link href=\\"src/assets/font/rubik/rubik-v7-latin-700.woff2\\"></head>
+<link href=\\"assets/bust-cached-font/libre-franklin/libre-franklin-v2-latin-400.woff2\\" as=\\"font\\" rel=\\"preload\\"><link href=\\"assets/bust-cached-font/rubik/rubik-v7-latin-300.woff2\\" as=\\"font\\" rel=\\"preload\\"><link href=\\"assets/bust-cached-font/rubik/rubik-v7-latin-400.woff2\\" as=\\"font\\" rel=\\"preload\\"><link href=\\"assets/bust-cached-font/rubik/rubik-v7-latin-500.woff2\\" as=\\"font\\" rel=\\"preload\\"><link href=\\"assets/bust-cached-font/rubik/rubik-v7-latin-700.woff2\\" as=\\"font\\" rel=\\"preload\\"></head>
 <body>
   <app-root></app-root>
-</body>
+<script type=\\"text/javascript\\" src=\\"runtime.js\\"></script><script type=\\"text/javascript\\" src=\\"polyfills.js\\"></script><script type=\\"text/javascript\\" src=\\"styles.js\\"></script><script type=\\"text/javascript\\" src=\\"vendor.js\\"></script><script type=\\"text/javascript\\" src=\\"main.js\\"></script></body>
 </html>
 "
 `;
@@ -28,10 +28,10 @@ exports[`Angular test suite snapshots: angular.json set with architect.build.bui
 
   <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1\\">
   <link rel=\\"icon\\" type=\\"image/x-icon\\" href=\\"favicon.ico\\">
-<link href=\\"src/assets/font/libre-franklin/libre-franklin-v2-latin-400.8d503c823a91e889c0e7.woff2\\"><link href=\\"src/assets/font/rubik/rubik-v7-latin-300.eb02199844b4e2a0871c.woff2\\"><link href=\\"src/assets/font/rubik/rubik-v7-latin-400.1ecc21093d3c8aa44b3e.woff2\\"><link href=\\"src/assets/font/rubik/rubik-v7-latin-500.d3fd715f234b8dcdd09d.woff2\\"><link href=\\"src/assets/font/rubik/rubik-v7-latin-700.9aff6f99df5790ad5dbd.woff2\\"></head>
+<link rel=\\"stylesheet\\" href=\\"styles.0e5d74c770da8e85b22e.css\\"><link href=\\"assets/bust-cached-font/libre-franklin/libre-franklin-v2-latin-400.8d503c823a91e889c0e7.woff2\\" as=\\"font\\" rel=\\"preload\\"><link href=\\"assets/bust-cached-font/rubik/rubik-v7-latin-300.eb02199844b4e2a0871c.woff2\\" as=\\"font\\" rel=\\"preload\\"><link href=\\"assets/bust-cached-font/rubik/rubik-v7-latin-400.1ecc21093d3c8aa44b3e.woff2\\" as=\\"font\\" rel=\\"preload\\"><link href=\\"assets/bust-cached-font/rubik/rubik-v7-latin-500.d3fd715f234b8dcdd09d.woff2\\" as=\\"font\\" rel=\\"preload\\"><link href=\\"assets/bust-cached-font/rubik/rubik-v7-latin-700.9aff6f99df5790ad5dbd.woff2\\" as=\\"font\\" rel=\\"preload\\"></head>
 <body>
   <app-root></app-root>
-</body>
+<script type=\\"text/javascript\\" src=\\"runtime.26209474bfa8dc87a77c.js\\"></script><script type=\\"text/javascript\\" src=\\"polyfills.8a55347372f0994ae121.js\\"></script><script type=\\"text/javascript\\" src=\\"main.71b7733a833b42b9ab31.js\\"></script></body>
 </html>
 "
 `;

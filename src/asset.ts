@@ -1,11 +1,11 @@
 import { pluginName, hash, Compilation } from './common';
 
 import { Path } from '@angular-devkit/core';
-import { isDefined } from '../linked_modules/@mt/browser-util/is';
-import { assignDefaultOption } from '../linked_modules/@mt/browser-util/assign';
-import * as path from 'path';
-import * as fs from 'fs';
-import * as globby from 'globby';
+import { isDefined, assignDefaultOption } from '@upradata/browser-util';
+import { colors } from '@upradata/node-util';
+import path from 'path';
+import fs from 'fs';
+import globby from 'globby';
 
 import { promisify } from 'util';
 const fsStatAsync = promisify(fs.stat);
@@ -85,19 +85,19 @@ export class Asset {
 
                 const hashClipped = hash ? '.' + this.getSourceHash(source) : '';
 
-                let outpurDirectory: string = undefined;
+                let outputDirectory: string = undefined;
 
                 if (isDefined(outputDir)) {
                     if (typeof outputDir === 'string')
-                        outpurDirectory = outputDir;
+                        outputDirectory = outputDir;
                     else
-                        outpurDirectory = outputDir(filepath);
+                        outputDirectory = outputDir(filepath);
                 } else {
                     const filepathRelDirFromRoot = filepath.startsWith('/')
                         ? path.relative(this.root, path.dirname(filepath))
                         : path.dirname(filepath);
 
-                    outpurDirectory = path.join(deployUrl, filepathRelDirFromRoot);
+                    outputDirectory = path.join(deployUrl, filepathRelDirFromRoot);
                 }
 
                 const basename = path.basename(filepath);
@@ -107,11 +107,18 @@ export class Asset {
                 let resolvedPath: string = undefined;
                 const assetAlreadyExists = this.findAsset(filename, ext);
 
-                if (isDefined(assetAlreadyExists))
+                /* if (isDefined(assetAlreadyExists))
                     resolvedPath = assetAlreadyExists;
-                else
-                    resolvedPath = path.join(outpurDirectory, `${filename}${hashClipped}${ext}`);
+                else */
+                // we could make a symbolic link if assetAlreadyExists
+                // Now, if asset already exist, it will be copied also on outputDirectory because asset has been
+                // emitted already and apparently it is too late. Maybe we can stop the asset emition?
+                resolvedPath = path.join(outputDirectory, `${filename}${hashClipped}${ext}`);
 
+                if (assetAlreadyExists) {
+                    console.warn(colors.yellow.$`${filename}${ext} already exist`);
+                    console.warn(colors.yellow.$`It will be duplicated in ${outputDirectory}`);
+                }
                 // console.log(Object.keys(this.compilation.assets));
                 // console.log(filepath, this.findAsset(filename, ext));
 
@@ -125,7 +132,7 @@ export class Asset {
     }
 
 
-    private findAsset(fileName: string, fileExt: string) {
+    private findAsset(fileName: string, fileExt: string): string {
 
         const assetName = Object.keys(this.compilation.assets).find(assetName => {
             const basename = path.basename(assetName);

@@ -1,5 +1,5 @@
-import * as path from 'path';
-import { AddAssetIndexPlugin, AssetResolved } from '../../src/add-asset-index-plugin';
+import  path from 'path';
+import { AddAssetIndexPlugin, AssetResolved, BuilderParameters } from '../../src/add-asset-index-plugin';
 import { AddAssetIndexPluginPrivate } from './add-asset-index-plugin.private';
 import { Asset } from '../../src/asset';
 import { AssetPrivate } from '../asset/asset.private';
@@ -8,7 +8,7 @@ import { IndexWriter } from '../../src/index-writer';
 import { WebpackCompilationMock } from '../index-writer/webpack-compilation.mock';
 import { Compilation } from '../../src/common';
 import { Compiler } from 'webpack';
-import { ExecuteOnTempState } from '../../linked_modules/@mt/browser-util/execute-temporary-state';
+import { ExecuteOnTempState } from '@upradata/browser-util';
 import { root, createAddAssetIndexPlugin, defaultAssetOption } from './add-asset-index-plugin.mock';
 
 
@@ -18,12 +18,12 @@ describe('Test suite for AddAssetIndexPlugin', () => {
     describe('Test suite for AddAssetIndexPlugin constructor', () => {
 
         test('default parameters', () => {
-            const builderOption = {
+            const builderOption: BuilderParameters = {
                 root: root as any,
-                options: {
+                buildOptions: {
                     index: path.join(root, 'src/index.html'),
                 },
-                webpackConfiguration: {
+                baseWebpackConfig: {
                     mode: 'development' as any
                 }
             };
@@ -35,8 +35,8 @@ describe('Test suite for AddAssetIndexPlugin', () => {
 
             expect(getBuilderOptionsMock).toHaveBeenCalledTimes(1);
             expect(addAssetIndexPlugin.root).toBe(root);
-            expect(addAssetIndexPlugin.option.input).toBe(path.resolve(root, builderOption.options.index));
-            expect(addAssetIndexPlugin.option.output).toBe(path.basename(builderOption.options.index));
+            expect(addAssetIndexPlugin.option.input).toBe(path.resolve(root, builderOption.buildOptions.index));
+            expect(addAssetIndexPlugin.option.output).toBe(path.basename(builderOption.buildOptions.index));
 
             AddAssetIndexPlugin.prototype[ 'getBuilderOptions' ] = getBuilderOptionsOriginal;
         });
@@ -55,7 +55,7 @@ describe('Test suite for AddAssetIndexPlugin', () => {
                 undefined,
                 {
                     param: {
-                        options: {
+                        buildOptions: {
                             baseHref, deployUrl, subresourceIntegrity, hash, place, attributes
                         }
                     }
@@ -78,7 +78,7 @@ describe('Test suite for AddAssetIndexPlugin', () => {
         test('Webpack mode = production should set hash to true', () => {
             const addAssetIndexPlugin = createAddAssetIndexPlugin(undefined,
                 {
-                    param: { webpackConfiguration: { mode: 'production' } }
+                    param: { baseWebpackConfig: { mode: 'production' } }
                 });
 
             expect(addAssetIndexPlugin.option.hash).toBe(true);
