@@ -43,7 +43,7 @@ It is useful for activating [cache busting](https://www.keycdn.com/support/what-
 ```
 
 
-# This documentation is for version 8 only. Find documentation for version 7 [here](https://github.com/mt-angular/angular-builders-add-asset-index-webpack-plugin/tree/angular8/packages/custom-webpack/README.md).
+# This documentation is for version 8 only. Find documentation for version 7 [here](https://github.com/mt-angular/angular-builders-add-asset-index-webpack-plugin/tree/angular7/packages/custom-webpack/README.md).
 
 # Prerequisites:
  - [Angular CLI 8](https://www.npmjs.com/package/@angular/cli)
