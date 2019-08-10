@@ -3,6 +3,15 @@
     "version": "8.0.2",
     "main": "dist",
     "license": "MIT",
+    "description": "@ud-angular-builders/add-asset-index-plugin is a Webpack Plugin using [@ud-angular-builders/custom-webpack](https://www.npmjs.com/package/@ud-angular-builders/custom-webpack) allowing to add link tag in Angular index.html output",
+    "author": {
+        "name": "Thomas Milotti",
+        "email": "thomas.milotti@gmail.com",
+        "url": "https://github.com/milottit"
+    },
+    "repository": {
+        "url": "https://github.com/mt-angular/angular-builders-add-asset-index-webpack-plugin.git"
+    },
     "publishConfig": {
         "access": "public"
     },
@@ -18,7 +27,7 @@
         "e2e-angular": "jest --config jest-e2e-angular.config.js",
         "set-follow-symlinks-watcher": "sed -i 's/followSymlinks: false/followSymlinks: true/g' node_modules/watchpack/lib/DirectoryWatcher.js",
         "git-push": "npm version patch && git push && git push --tags",
-        "npm-publish": "tsc && npm run publish --access public"
+        "npm-publish": "tsc && npm publish --access public"
     },
     "devDependencies": {
         "@angular-devkit/build-angular": "^0.802.1",
