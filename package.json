@@ -3,6 +3,9 @@
     "version": "8.0.1",
     "main": "dist",
     "license": "MIT",
+    "publishConfig": {
+        "access": "public"
+    },
     "scripts": {
         "clean": "shx rm -r dist || true",
         "prebuild": "npm run clean",
@@ -14,8 +17,8 @@
         "e2e-plain-webpack": "jest --config jest-e2e-plainwebpack.config.js",
         "e2e-angular": "jest --config jest-e2e-angular.config.js",
         "set-follow-symlinks-watcher": "sed -i 's/followSymlinks: false/followSymlinks: true/g' node_modules/watchpack/lib/DirectoryWatcher.js",
-        "push": "npm run version patch && git push && git push --tags",
-        "publish": "tsc && npm run publish --access public"
+        "git-push": "npm run version patch && git push && git push --tags",
+        "npm-publish": "tsc && npm run publish --access public"
     },
     "devDependencies": {
         "@angular-devkit/build-angular": "^0.802.1",
