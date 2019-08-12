@@ -1,4 +1,4 @@
-import parse5 from 'parse5';
+import parse5, { DocumentFragment } from 'parse5';
 import defaultTreeAdapter from 'parse5/lib/tree-adapters/default';
 import { RawSource, ReplaceSource } from 'webpack-sources';
 import { AssetResolved } from './add-asset-index-plugin';
