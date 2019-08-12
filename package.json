@@ -60,5 +60,12 @@
     },
     "majestic": {
         "jestConfig": "jest-ut.config.js"
-    }
+    },
+    "keywords": [
+        "Angular",
+        "Custom Webpack Builder",
+        "Transform index.html",
+        "Cache Busting",
+        "Add Link Tag"
+    ]
 }
