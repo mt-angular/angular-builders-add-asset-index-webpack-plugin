@@ -1,6 +1,6 @@
 {
     "name": "@ud-angular-builders/add-asset-index-plugin",
-    "version": "8.0.7",
+    "version": "8.0.8",
     "main": "dist",
     "license": "MIT",
     "description": "@ud-angular-builders/add-asset-index-plugin is a Webpack Plugin using [@ud-angular-builders/custom-webpack](https://www.npmjs.com/package/@ud-angular-builders/custom-webpack) allowing to add link tag in Angular index.html output",
