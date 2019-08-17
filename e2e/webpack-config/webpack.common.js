@@ -21,7 +21,8 @@ function commonWebpackConfiguration(option) {
             new clean_webpack_plugin_1.CleanWebpackPlugin({
                 cleanOnceBeforeBuildPatterns: [exports.dist(option.mode)],
                 verbose: true,
-                dangerouslyAllowCleanPatternsOutsideProject: true
+                dangerouslyAllowCleanPatternsOutsideProject: true,
+                dry: false
             }),
             new html_webpack_plugin_1.default({
                 template: path_1.default.join(exports.root, 'src/index.html'),

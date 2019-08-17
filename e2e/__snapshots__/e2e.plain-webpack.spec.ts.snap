@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = development End2End Snapshot index.html: AddAssetIndexPlugin default parameters with few blobs 1`] = `
+exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = development End2End Snapshot index.html: AddAssetIndexPlugin default parameters with few blobs:defaultParametersFewBlobs 1`] = `
 "<!doctype html>
 <html lang=\\"fr\\">
 
@@ -23,7 +23,7 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
 "
 `;
 
-exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = development End2End Snapshot index.html: AddAssetIndexPlugin default parameters with few files 1`] = `
+exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = development End2End Snapshot index.html: AddAssetIndexPlugin default parameters with few files: defaultParametersFewFiles 1`] = `
 "<!doctype html>
 <html lang=\\"fr\\">
 
@@ -46,7 +46,7 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
 "
 `;
 
-exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = development End2End Snapshot index.html: AddAssetIndexPlugin default parameters with one blob 1`] = `
+exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = development End2End Snapshot index.html: AddAssetIndexPlugin default parameters with one blob: defaultParametersOneBlob 1`] = `
 "<!doctype html>
 <html lang=\\"fr\\">
 
@@ -69,7 +69,7 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
 "
 `;
 
-exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = development End2End Snapshot index.html: AddAssetIndexPlugin few blobs with asset specific buildOptions overriding generic buildOptions 1`] = `
+exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = development End2End Snapshot index.html: AddAssetIndexPlugin few blobs with asset specific buildOptions overriding generic buildOptions: fewBlobsWithAssetBuildOptions 1`] = `
 "<!doctype html>
 <html lang=\\"fr\\">
 
@@ -82,7 +82,7 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
     <link rel=\\"icon\\" type=\\"image/x-icon\\" href=\\"favicon.ico\\">
 
 
-<link href=\\"public/deploy/libre-franklin/assets/font/libre-franklin/libre-franklin-v2-latin-400.8d503c823a91e889c0e7.woff2\\" integrity=\\"sha384-jVA8gjqR6InA55te1lTZNFqlUof0Y7M/qRbi0I+k1QzObyqva8Ue7Q0hOk2jrXMX\\" crossorigin=\\"anonymous\\" as=\\"font\\" rel=\\"preload\\" network=\\"global\\" speed=\\"super-fast\\"></head>
+<link href=\\"public/deploy/libre-franklin/assets/font/libre-franklin/libre-franklin-v2-latin-400.8d503c823a91e889c0e7.woff2\\" integrity=\\"sha384-Mud/18g/t6K/J7IibZYJOkdCdaTgvAjHHeqEJJvnlu9jOdDe+Stc1XxHxH3cO5eq\\" crossorigin=\\"anonymous\\" as=\\"font\\" rel=\\"preload\\" network=\\"global\\" speed=\\"super-fast\\"></head>
 
 <body>
     <app-root class=\\"mt mat-typography\\"></app-root>
@@ -92,7 +92,7 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
 "
 `;
 
-exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = development End2End Snapshot index.html: AddAssetIndexPlugin one blob with asset specific option outputDir 1`] = `
+exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = development End2End Snapshot index.html: AddAssetIndexPlugin one blob with asset specific option outputDir: oneBlobWithAssetOptionOutputDir 1`] = `
 "<!doctype html>
 <html lang=\\"fr\\">
 
@@ -115,7 +115,7 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
 "
 `;
 
-exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = development End2End Snapshot index.html: AddAssetIndexPlugin one blob with generic buildOptions 1`] = `
+exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = development End2End Snapshot index.html: AddAssetIndexPlugin one blob with generic buildOptions: oneBlobWithGenericBuildOptions 1`] = `
 "<!doctype html>
 <html lang=\\"fr\\">
 
@@ -138,7 +138,7 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
 "
 `;
 
-exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = production End2End Snapshot index.html: AddAssetIndexPlugin default parameters with few blobs 1`] = `
+exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = production End2End Snapshot index.html: AddAssetIndexPlugin default parameters with few blobs:defaultParametersFewBlobs 1`] = `
 "<!doctype html>
 <html lang=\\"fr\\">
 
@@ -161,7 +161,7 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
 "
 `;
 
-exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = production End2End Snapshot index.html: AddAssetIndexPlugin default parameters with few files 1`] = `
+exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = production End2End Snapshot index.html: AddAssetIndexPlugin default parameters with few files: defaultParametersFewFiles 1`] = `
 "<!doctype html>
 <html lang=\\"fr\\">
 
@@ -184,7 +184,7 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
 "
 `;
 
-exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = production End2End Snapshot index.html: AddAssetIndexPlugin default parameters with one blob 1`] = `
+exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = production End2End Snapshot index.html: AddAssetIndexPlugin default parameters with one blob: defaultParametersOneBlob 1`] = `
 "<!doctype html>
 <html lang=\\"fr\\">
 
@@ -207,7 +207,7 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
 "
 `;
 
-exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = production End2End Snapshot index.html: AddAssetIndexPlugin few blobs with asset specific buildOptions overriding generic buildOptions 1`] = `
+exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = production End2End Snapshot index.html: AddAssetIndexPlugin few blobs with asset specific buildOptions overriding generic buildOptions: fewBlobsWithAssetBuildOptions 1`] = `
 "<!doctype html>
 <html lang=\\"fr\\">
 
@@ -220,7 +220,7 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
     <link rel=\\"icon\\" type=\\"image/x-icon\\" href=\\"favicon.ico\\">
 
 
-<link href=\\"public/deploy/libre-franklin/assets/font/libre-franklin/libre-franklin-v2-latin-400.8d503c823a91e889c0e7.woff2\\" integrity=\\"sha384-jVA8gjqR6InA55te1lTZNFqlUof0Y7M/qRbi0I+k1QzObyqva8Ue7Q0hOk2jrXMX\\" crossorigin=\\"anonymous\\" as=\\"font\\" rel=\\"preload\\" network=\\"global\\" speed=\\"super-fast\\"></head>
+<link href=\\"public/deploy/libre-franklin/assets/font/libre-franklin/libre-franklin-v2-latin-400.8d503c823a91e889c0e7.woff2\\" integrity=\\"sha384-Mud/18g/t6K/J7IibZYJOkdCdaTgvAjHHeqEJJvnlu9jOdDe+Stc1XxHxH3cO5eq\\" crossorigin=\\"anonymous\\" as=\\"font\\" rel=\\"preload\\" network=\\"global\\" speed=\\"super-fast\\"></head>
 
 <body>
     <app-root class=\\"mt mat-typography\\"></app-root>
@@ -230,7 +230,7 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
 "
 `;
 
-exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = production End2End Snapshot index.html: AddAssetIndexPlugin one blob with asset specific option outputDir 1`] = `
+exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = production End2End Snapshot index.html: AddAssetIndexPlugin one blob with asset specific option outputDir: oneBlobWithAssetOptionOutputDir 1`] = `
 "<!doctype html>
 <html lang=\\"fr\\">
 
@@ -253,7 +253,7 @@ exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mod
 "
 `;
 
-exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = production End2End Snapshot index.html: AddAssetIndexPlugin one blob with generic buildOptions 1`] = `
+exports[`Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = production End2End Snapshot index.html: AddAssetIndexPlugin one blob with generic buildOptions: oneBlobWithGenericBuildOptions 1`] = `
 "<!doctype html>
 <html lang=\\"fr\\">
 

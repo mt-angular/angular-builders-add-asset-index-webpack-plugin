@@ -6,7 +6,7 @@ const { AddAssetIndexPlugin } = require('../dist/add-asset-index-plugin');
 console.log('Extra Webpack : Thomas Milotti :)');
 
 
-module.exports = (builderParameters) => {
+module.exports = builderParameters => {
 
     return {
         /*  module: {

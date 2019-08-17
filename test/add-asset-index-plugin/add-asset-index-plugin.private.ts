@@ -1,4 +1,4 @@
-import { AssetResolved, AddAssetIndexPluginOptions, BuilderParameters } from '../../src/add-asset-index-plugin';
+import { AssetResolved, AddAssetIndexPluginOptions, BuilderParametersNeeded } from '../../src/add-asset-index-plugin';
 import { AssetOption, Asset } from '../../src/asset';
 import { Path } from '@angular-devkit/core';
 import { IndexWriter } from '../../src/index-writer';
@@ -13,11 +13,12 @@ export interface AddAssetIndexPluginPrivate {
     assets: Asset[];
     indexWriter: IndexWriter;
     compilation: Compilation;
+    builderParameters: BuilderParametersNeeded;
 
-    (assetsOption: AssetOption | AssetOption[], builderParameters: BuilderParameters): AddAssetIndexPluginPrivate;
+    (assetsOption: AssetOption | AssetOption[], builderParameters: BuilderParametersNeeded): AddAssetIndexPluginPrivate;
 
 
-    getBuilderOptions(builderParameters: BuilderParameters): AddAssetIndexPluginOptions;
+    getBuilderOptions(): AddAssetIndexPluginOptions;
     initAssets();
     apply(compiler: Compiler);
     handleEmit(compilation: Compilation): Promise<void>;

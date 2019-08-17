@@ -1,4 +1,4 @@
-import { AssetOption } from '../../src/asset';
+import { AssetOption, ResolvedPath } from '../../src/asset';
 import { Path } from '@angular-devkit/core';
 import { Compilation } from '../../src/common';
 
@@ -12,7 +12,7 @@ export interface AssetPrivate {
 
     getAssetsOptionsWithGlobFetch(): Promise<string[]>;
     getPathsFromGlob(globPattern: string): Promise<string[]>;
-    addFileToAssets(): Promise<string[]>;
-    addFileToWebpackAssets(filepath: string): Promise<string>;
+    addFileToAssets(): Promise<ResolvedPath[]>;
+    addFileToWebpackAssets(filepath: string): Promise<ResolvedPath>;
     getSourceHash(source: Buffer): string;
 }

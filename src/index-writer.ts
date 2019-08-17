@@ -6,8 +6,10 @@ import { LocationInIndex } from './asset';
 import { hash, HashOption, Compilation } from './common';
 import { HtmlSerializer, SerializerOption } from './html-serializer';
 import { isDefined, isUndefined, isNull, isNil } from '@upradata/browser-util';
-import { pathNormalize } from '@upradata/node-util';
+import { promisify } from 'util';
+import { readFile } from 'fs';
 
+const readFileAsync = promisify(readFile);
 
 export class FragmentData {
     location: number = undefined;
@@ -15,8 +17,7 @@ export class FragmentData {
 }
 
 export class IndexWriterOption {
-    indexInputPath: string = pathNormalize('src/index.html');
-    indexOutputPath: string = 'index.html';
+    indexHtmlContent: string = '';
 }
 
 export class IndexWriter {
@@ -28,12 +29,12 @@ export class IndexWriter {
     private indexSource: ReplaceSource;
     private initDone: boolean = false;
 
-    constructor(public compilation: Compilation, option: IndexWriterOption) {
+    constructor(option: IndexWriterOption) {
         this.option = Object.assign(new IndexWriterOption(), option);
     }
 
     public init() {
-        const indexContent = this.getInputContent(); // await this.readFile();
+        const indexContent = this.option.indexHtmlContent;
 
         const document = parse5.parse(indexContent, { treeAdapter: defaultTreeAdapter, sourceCodeLocationInfo: true }) as parse5.DefaultTreeDocument;
 
@@ -76,41 +77,48 @@ export class IndexWriter {
         }
 
         // Inject into the html
-        this.indexSource = new ReplaceSource(new RawSource(indexContent), this.option.indexInputPath);
+        this.indexSource = new ReplaceSource(new RawSource(indexContent), this.option.indexHtmlContent);
     }
 
 
-    public writeInIndex(assetResolved: AssetResolved[]) {
+    public async writeInIndex(assetResolved: AssetResolved[]): Promise<string> {
         if (!this.initDone) {
             this.initDone = true;
             this.init();
         }
 
+        const links$: Promise<void>[] = [];
+
         for (const resolved of assetResolved) {
 
-            const { place } = resolved.asset.option;
+            const { place } = resolved.asset;
 
-            const link = this.createLink(resolved);
-            this.appendLinkToFragment(place, link);
+
+            const link$ = this.createLink(resolved).then(link => this.appendLinkToFragment(place, link));
+            links$.push(link$);
         }
 
+        await Promise.all(links$);
         this.insertFragmentsInIndex();
 
         // Add to compilation assets
-        this.compilation.assets[ this.option.indexOutputPath ] = this.indexSource;
+        return this.indexSource.source();
     }
 
+    private getAssetContent(path: string): Promise<string> {
+        return readFileAsync(path, { encoding: 'utf8' });
+    }
 
-    private createLink(assetResolved: AssetResolved): parse5.DefaultTreeElement {
+    private async createLink(assetResolved: AssetResolved): Promise<parse5.DefaultTreeElement> {
         const { resolvedPath } = assetResolved;
-        const { sri, attributes } = assetResolved.asset.option;
+        const { sri, attributes } = assetResolved.asset;
 
         const attrs = [
-            { name: 'href', value: resolvedPath },
+            { name: 'href', value: resolvedPath.relative },
         ];
 
         if (sri) {
-            const content = this.compilation.assets[ resolvedPath ].source();
+            const content = await this.getAssetContent(resolvedPath.absolute);
             attrs.push(...this.generateSriAttributes(content));
         }
 
@@ -130,14 +138,12 @@ export class IndexWriter {
         const fragmentData = place === 'head' ? this.head : this.body;
 
         if (isUndefined(fragmentData.location)) {
-            const error = new Error(`Missing ${place} element in ${this.option.indexInputPath}`);
-            this.compilation.errors.push(error);
-            throw error;
+            throw new Error(`Missing ${place} element in index.html content: "${this.option.indexHtmlContent}"`);
         }
 
-        if (isUndefined(fragmentData.fragment))
+        if (isUndefined(fragmentData.fragment)) {
             fragmentData.fragment = defaultTreeAdapter.createDocumentFragment();
-
+        }
 
         defaultTreeAdapter.appendChild(fragmentData.fragment, link);
     }
@@ -157,44 +163,12 @@ export class IndexWriter {
 
     }
 
-
     private serializeHtml(node: parse5.Node, options: SerializerOption): string {
         const serializer = new HtmlSerializer(node, options);
 
         return serializer.serialize();
     }
 
-    private async readFile(): Promise<string> {
-        const { indexInputPath } = this.option;
-
-        return new Promise<string>((resolve, reject) => {
-            this.compilation.inputFileSystem.readFile(indexInputPath, (err: Error, data: Buffer) => {
-                if (!isNil(err)) {
-                    reject(err);
-                    return;
-                }
-
-                let content: string = undefined;
-
-                if (data.length >= 3 && data[ 0 ] === 0xEF && data[ 1 ] === 0xBB && data[ 2 ] === 0xBF) {
-                    // Strip UTF-8 BOM
-                    content = data.toString('utf8', 3);
-                } else if (data.length >= 2 && data[ 0 ] === 0xFF && data[ 1 ] === 0xFE) {
-                    // Strip UTF-16 LE BOM
-                    content = data.toString('utf16le', 2);
-                } else {
-                    content = data.toString();
-                }
-
-                resolve(content);
-            });
-        });
-    }
-
-    private getInputContent(): string {
-        const asset: { source: () => Buffer } = this.compilation.assets[ this.option.indexOutputPath ];
-        return asset.source().toString();
-    }
 
     private generateSriAttributes(content: string, hashOption?: HashOption): { name: string; value: string }[] {
         const hashOpt = Object.assign({ algo: 'sha384', digest: 'base64' }, hashOption);

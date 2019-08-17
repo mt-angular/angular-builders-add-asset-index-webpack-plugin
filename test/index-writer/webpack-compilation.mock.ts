@@ -37,7 +37,7 @@ export class WebpackCompilationMock {
         return readFileMock; */
         const bufferContent = Buffer.from(content);
 
-        this.compilation.assets[ this.indexWriterOption.indexOutputPath ] = {
+        this.compilation.assets[ 'index.html' ] = {
             source: () => bufferContent,
             size: () => bufferContent.length
         };

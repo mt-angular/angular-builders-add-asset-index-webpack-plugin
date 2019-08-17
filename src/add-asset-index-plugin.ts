@@ -1,67 +1,82 @@
 // import { BuildOptions } from '@angular-devkit/build-angular/src/angular-cli-files/models/build-options';
 import { IndexHtmlWebpackPluginOptions } from '@angular-devkit/build-angular/src/angular-cli-files/plugins/index-html-webpack-plugin';
-import { CustomWebpackBrowserSchema } from '@ud-angular-builders/custom-webpack';
+import { CustomWebpackBrowserSchema, BuilderParameters } from '@ud-angular-builders/custom-webpack';
 import path from 'path';
-import { isArray, isDefined, assignDefaultOption } from '@upradata/browser-util';
+import { isArray, isDefined, assignDefaultOption, isUndefined } from '@upradata/browser-util';
 
 import { Compiler, Configuration as WebpackConfiguration } from 'webpack';
 import { Tap } from 'tapable';
 import { getSystemPath, Path } from '@angular-devkit/core';
-import { Asset, AssetOption, AssetGlobalOption } from './asset';
+import { Asset, AssetOption, AssetGlobalOption, ResolvedPath } from './asset';
 import { IndexWriter } from './index-writer';
 import { pluginName, Compilation } from './common';
+import { BuilderContext } from '@angular-devkit/architect';
+import { WriteIndexHtmlOptions } from '@angular-devkit/build-angular/src/angular-cli-files/utilities/index-file/write-index-html';
 
+import { tmpdir } from 'os';
+import { mkdtemp, writeFile, readFile } from 'fs';
+import { promisify } from 'util';
+import { Transforms } from '@ud-angular-builders/custom-webpack/dist/transforms';
+
+const tmpDir = tmpdir();
+const makeTmpDir = promisify(mkdtemp);
+const writeFileAsync = promisify(writeFile);
+const readFileAsync = promisify(readFile);
 
 // We need only these properties. Not all angular.json builder configuration
-export type BuilderParametersOptions = {
-    index: CustomWebpackBrowserSchema[ 'index' ];
+export type BuilderOptionsNeeded = {
     baseHref?: CustomWebpackBrowserSchema[ 'baseHref' ]; // not necessary. I will delete it certainely
     // deployUrl?: NormalizedCustomWebpackBrowserBuildSchema[ 'deployUrl' ]; // already in AssetGlobalOption
     subresourceIntegrity?: CustomWebpackBrowserSchema[ 'subresourceIntegrity' ]; // will be sri in AssetGlobalOption
+    indexTransforms: Transforms
+
 } & Omit<AssetGlobalOption, 'sri'>;
 
 
-// We need only these properties. Not all @ud-angular-builders/custom-webpack-7 BuilderParameters
-export interface BuilderParameters {
-    root: Path;
-    buildOptions: BuilderParametersOptions;
+// We need only these properties. Not all @ud-angular-builders/custom-webpack BuilderParameters
+export interface BuilderParametersNeeded {
+    builderContext: { workspaceRoot: BuilderContext[ 'workspaceRoot' ] };
+    buildOptions: BuilderOptionsNeeded;
     baseWebpackConfig: { mode: WebpackConfiguration[ 'mode' ] };
 }
 
-export type AddAssetIndexPluginOptions = Omit<IndexHtmlWebpackPluginOptions, 'entrypoints' | 'noModuleEntrypoints' | 'moduleEntrypoints'> & AssetGlobalOption;
+export type AddAssetIndexPluginOptions = Partial<WriteIndexHtmlOptions & AssetGlobalOption>;
 
 export interface AssetResolved {
-    asset: Asset;
-    resolvedPath: string;
+    asset: AssetOption;
+    resolvedPath: ResolvedPath;
+}
+
+export interface Extra {
+    tmpFile?: string;
 }
 
 export class AddAssetIndexPlugin {
     private assetsOption: AssetOption[];
-    private root: Path;
+    private root: string;
     private option: AddAssetIndexPluginOptions;
     private assets: Asset[];
     private indexWriter: IndexWriter;
     private compilation: Compilation;
+    private tmpFile: string;
 
-    constructor(assetsOption: AssetOption | AssetOption[], builderParameters: BuilderParameters) {
+    constructor(assetsOption: AssetOption | AssetOption[], private builderParameters: BuilderParametersNeeded, extra: Extra = {}) {
         // @angular-devkit/build-angular/src/angular-cli-files/plugins/index-html-webpack-plugin
         // new IndexHtmlWebpackPlugin(); if one day we need. Like we could overwrite
-        this.root = builderParameters.root;
-        this.option = this.getBuilderOptions(builderParameters); // Object.assign(new Option(), option);
+        this.root = builderParameters.builderContext.workspaceRoot;
+        this.option = this.getBuilderOptions();
         this.assetsOption = isArray<AssetOption>(assetsOption) ? assetsOption : [ assetsOption ];
+
+        this.builderParameters.buildOptions.indexTransforms.addIndexTransform(this.writeIndex.bind(this));
+        this.tmpFile = extra.tmpFile;
     }
 
-    private getBuilderOptions(builderParameters: BuilderParameters): AddAssetIndexPluginOptions {
-        const root = getSystemPath(builderParameters.root);
+    private getBuilderOptions(): AddAssetIndexPluginOptions {
+        const { baseHref, deployUrl, subresourceIntegrity, hash, place, attributes, outputDir } = this.builderParameters.buildOptions;
 
-        const { index: indexUnion, baseHref, deployUrl, subresourceIntegrity, hash, place, attributes, outputDir } = builderParameters.buildOptions;
-
-        const index = typeof indexUnion === 'string' ? indexUnion : indexUnion.input;
 
         // copied from '@angular-devkit/build-angular/src/angular-cli-files/plugins/index-html-webpack-plugin'
         const buildOptions = {
-            input: path.resolve(root, index),
-            output: path.basename(index),
             baseHref,
             // entrypoints: generateEntryPoints(builderParameters.options),
             deployUrl,
@@ -71,8 +86,6 @@ export class AddAssetIndexPlugin {
 
         // copied from @angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs/browser.ts
         const options: AddAssetIndexPluginOptions = {
-            input: 'index.html',
-            output: 'index.html',
             // entrypoints: ['polyfills', 'main'],
             // noModuleEntrypoints: [],
             sri: false,
@@ -80,7 +93,7 @@ export class AddAssetIndexPlugin {
             // My addition
             place,
             attributes,
-            hash: hash || builderParameters.baseWebpackConfig.mode === 'production',
+            hash: hash || this.builderParameters.baseWebpackConfig.mode === 'production',
             outputDir
         };
 
@@ -113,9 +126,9 @@ export class AddAssetIndexPlugin {
         // it is a mistake. Here it should be just a Partial. In Tap, it is missing even before
         // check source code https://github.com/webpack/tapable/blob/master/lib/Hook.js
         compiler.hooks.emit.tapPromise(tapOption as Tap, async (compilation: Compilation) => {
-            if (compilation.assets[ this.option.output ] === undefined)
-                throw new Error(`AddAssetIndexPlugin can not be used before index.html has been emited by another plugin. In angular, the plugin is:
-                 angular-cli/packages/angular_devkit/build_angular/src/angular-cli-files/plugins/index-html-webpack-plugin.ts`);
+            /*  if (compilation.assets[ this.option.output ] === undefined)
+                 throw new Error(`AddAssetIndexPlugin can not be used before index.html has been emited by another plugin. In angular, the plugin is:
+                  angular-cli/packages/angular_devkit/build_angular/src/angular-cli-files/plugins/index-html-webpack-plugin.ts`); */
 
             await this.handleEmit(compilation);
         });
@@ -125,13 +138,36 @@ export class AddAssetIndexPlugin {
         this.compilation = compilation;
         this.initAssets();
 
-        this.indexWriter = new IndexWriter(this.compilation, {
-            indexInputPath: this.option.input,
-            indexOutputPath: this.option.output
-        });
-
         const assetsResolved = await this.addAllAssetsToCompilation();
-        this.indexWriter.writeInIndex(assetsResolved);
+        this.writeAssets(assetsResolved);
+    }
+
+    private getTmpdir(): Promise<string> {
+        return makeTmpDir(`${tmpDir}${path.sep}`).catch(e => {
+            throw new Error(`An error occured while creating a tmp directory in ${`${tmpDir}${path.sep}`}: ${e}`);
+        });
+    }
+
+    private async writeAssets(assetsResolved: AssetResolved[]): Promise<void> {
+        if (isUndefined(this.tmpFile)) {
+            const tmpDir = await this.getTmpdir();
+            this.tmpFile = path.join(tmpDir, 'assets.json');
+        }
+
+        await writeFileAsync(this.tmpFile, JSON.stringify(assetsResolved), { encoding: 'utf8' });
+    }
+
+
+    private async readAssets(): Promise<AssetResolved[]> {
+        const json = await readFileAsync(this.tmpFile, { encoding: 'utf8' });
+        return JSON.parse(json);
+    }
+
+    private async writeIndex(indexHtmlContent: string) {
+        const assetsResolved = await this.readAssets();
+
+        this.indexWriter = new IndexWriter({ indexHtmlContent });
+        return this.indexWriter.writeInIndex(assetsResolved);
     }
 
     async addAllAssetsToCompilation(): Promise<AssetResolved[]> {
@@ -147,7 +183,7 @@ export class AddAssetIndexPlugin {
             for (const { asset, resolvedPaths } of resolved) {
 
                 for (const resolvedPath of resolvedPaths)
-                    assetsResolved.push({ asset, resolvedPath });
+                    assetsResolved.push({ asset: asset.option, resolvedPath });
             }
         });
 

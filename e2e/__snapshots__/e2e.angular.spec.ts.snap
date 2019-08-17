@@ -13,7 +13,7 @@ exports[`Angular test suite snapshots: angular.json set with architect.build.bui
 <link href=\\"assets/bust-cached-font/libre-franklin/libre-franklin-v2-latin-400.woff2\\" as=\\"font\\" rel=\\"preload\\"><link href=\\"assets/bust-cached-font/rubik/rubik-v7-latin-300.woff2\\" as=\\"font\\" rel=\\"preload\\"><link href=\\"assets/bust-cached-font/rubik/rubik-v7-latin-400.woff2\\" as=\\"font\\" rel=\\"preload\\"><link href=\\"assets/bust-cached-font/rubik/rubik-v7-latin-500.woff2\\" as=\\"font\\" rel=\\"preload\\"><link href=\\"assets/bust-cached-font/rubik/rubik-v7-latin-700.woff2\\" as=\\"font\\" rel=\\"preload\\"></head>
 <body>
   <app-root></app-root>
-<script type=\\"text/javascript\\" src=\\"runtime.js\\"></script><script type=\\"text/javascript\\" src=\\"polyfills.js\\"></script><script type=\\"text/javascript\\" src=\\"styles.js\\"></script><script type=\\"text/javascript\\" src=\\"vendor.js\\"></script><script type=\\"text/javascript\\" src=\\"main.js\\"></script></body>
+<script src=\\"runtime.js\\" defer></script><script src=\\"polyfills-es5.js\\" nomodule defer></script><script src=\\"polyfills.js\\" defer></script><script src=\\"styles.js\\" defer></script><script src=\\"vendor.js\\" defer></script><script src=\\"main.js\\" defer></script></body>
 </html>
 "
 `;
@@ -31,7 +31,7 @@ exports[`Angular test suite snapshots: angular.json set with architect.build.bui
 <link rel=\\"stylesheet\\" href=\\"styles.0e5d74c770da8e85b22e.css\\"><link href=\\"assets/bust-cached-font/libre-franklin/libre-franklin-v2-latin-400.8d503c823a91e889c0e7.woff2\\" as=\\"font\\" rel=\\"preload\\"><link href=\\"assets/bust-cached-font/rubik/rubik-v7-latin-300.eb02199844b4e2a0871c.woff2\\" as=\\"font\\" rel=\\"preload\\"><link href=\\"assets/bust-cached-font/rubik/rubik-v7-latin-400.1ecc21093d3c8aa44b3e.woff2\\" as=\\"font\\" rel=\\"preload\\"><link href=\\"assets/bust-cached-font/rubik/rubik-v7-latin-500.d3fd715f234b8dcdd09d.woff2\\" as=\\"font\\" rel=\\"preload\\"><link href=\\"assets/bust-cached-font/rubik/rubik-v7-latin-700.9aff6f99df5790ad5dbd.woff2\\" as=\\"font\\" rel=\\"preload\\"></head>
 <body>
   <app-root></app-root>
-<script type=\\"text/javascript\\" src=\\"runtime.26209474bfa8dc87a77c.js\\"></script><script type=\\"text/javascript\\" src=\\"polyfills.8a55347372f0994ae121.js\\"></script><script type=\\"text/javascript\\" src=\\"main.71b7733a833b42b9ab31.js\\"></script></body>
+<script src=\\"runtime.ee0aae13fb762b150814.js\\" defer></script><script src=\\"polyfills-es5.f6e4f7f783ff74a1064c.js\\" nomodule defer></script><script src=\\"polyfills.d0c730e964885f9a4565.js\\" defer></script><script src=\\"main.7edd871a85d25d3e4afb.js\\" defer></script></body>
 </html>
 "
 `;

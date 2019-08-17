@@ -1,8 +1,14 @@
-import { addAssetIndexPluginList } from './webpack-config/add-asset-index-plugin-configurations';
+import { addAssetIndexPluginList, assetDir } from './webpack-config/add-asset-index-plugin-configurations';
 import path from 'path';
 import { execSyncCommand, readFileAsync } from './util';
+import { AddAssetIndexPlugin } from '../dist/add-asset-index-plugin';
+import { Transforms } from '@ud-angular-builders/custom-webpack/dist/transforms';
+import rimraf from 'rimraf';
+import { writeFile } from 'fs';
+import { promisify } from 'util';
 
-
+const rmAsync = promisify(rimraf);
+const writeFileAsync = promisify(writeFile);
 
 const rootProject = path.resolve(__dirname, '..');
 
@@ -31,8 +37,8 @@ execSyncCommand(commands.compileWebpackConfigs);
 
 const modes: Array<'development' | 'production'> = [ 'development', 'production' ];
 const configs: {
-    development: Array<string>[]
-    production: Array<string>[]
+    development: [ string, string, string, AddAssetIndexPlugin ][]
+    production: [ string, string, string, AddAssetIndexPlugin ][]
 } = {} as any;
 
 for (const mode of modes) {
@@ -40,9 +46,13 @@ for (const mode of modes) {
     execSyncCommand(commands.runWebpack(mode));
 
     const webpackConfigurations = addAssetIndexPluginList({ mode });
-    configs[ mode ] = webpackConfigurations.map(config => [ config.title, config.outputDir ]);
+    configs[ mode ] = webpackConfigurations.map(config => [ config.title, config.outputDir, config.tmpFile, config.configuration ]);
 }
 
+
+afterAll(async () => {
+    await rmAsync(assetDir);
+});
 
 describe.each(modes)(
     'Test suite for e2e webpack config with AddAssetIndexPlugin. Webpack mode = %s End2End',
@@ -52,10 +62,20 @@ describe.each(modes)(
         /* beforeAll(() => {
              jest.setTimeout(30000);
         }); */
+
         test.each(configs[ mode ])(
-            'Snapshot index.html: %s', async (title: string, outputDir: string) => {
-                const indexHTML = await readFileAsync(path.join(outputDir, 'index.html'), { encoding: 'utf8' });
-                expect(indexHTML).toMatchSnapshot();
+            'Snapshot index.html: %s', async (title: string, outputDir: string, tmpFile: string, addAssetIndexPlugin: AddAssetIndexPlugin) => {
+
+                const indexFile = path.join(outputDir, 'index.html');
+
+                let indexHTMLContent = await readFileAsync(indexFile, { encoding: 'utf8' });
+                const transforms: Transforms = (addAssetIndexPlugin as any).builderParameters.buildOptions.indexTransforms;
+                (addAssetIndexPlugin as any).tmpFile = tmpFile;
+
+                indexHTMLContent = await transforms.indexHtml(indexHTMLContent);
+                await writeFileAsync(indexFile, indexHTMLContent, { encoding: 'utf8' });
+
+                expect(indexHTMLContent).toMatchSnapshot();
             });
 
     }

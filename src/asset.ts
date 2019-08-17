@@ -14,10 +14,12 @@ const fsReadFileAsync = promisify(fs.readFile);
 
 
 export type LocationInIndex = 'head' | 'body';
-
 export type OutputPathCallback = (path: string) => string;
 export type OutputPath = string | OutputPathCallback;
-
+export interface ResolvedPath {
+    relative: string;
+    absolute: string;
+}
 
 export class AssetGlobalOption {
     deployUrl?: string = ''; // to overwrite BuilderParametersOption.deployUrl
@@ -28,6 +30,7 @@ export class AssetGlobalOption {
     outputDir?: OutputPath = undefined;
 }
 
+
 export class AssetOption extends AssetGlobalOption {
     filepath: string; // can be a glob
 }
@@ -35,7 +38,7 @@ export class AssetOption extends AssetGlobalOption {
 export class Asset {
     public option: AssetOption;
 
-    constructor(public compilation: Compilation, public root: Path, option: AssetOption) {
+    constructor(public compilation: Compilation, public root: string, option: AssetOption) {
         this.option = assignDefaultOption(new AssetOption(), option);
     }
 
@@ -53,10 +56,10 @@ export class Asset {
         return globby(globPattern);
     }
 
-    async addFileToAssets(): Promise<string[]> {
+    async addFileToAssets(): Promise<ResolvedPath[]> {
         const paths = await this.getAssetsOptionsWithGlobFetch();
 
-        const resolvedPaths = [];
+        const resolvedPaths: ResolvedPath[] = [];
 
         for (const filepath of paths) {
             const resolvedPath = await this.addFileToWebpackAssets(filepath);
@@ -67,7 +70,7 @@ export class Asset {
     }
 
     // from https://github.com/jantimon/html-webpack-plugin/blob/master/index.js
-    private async addFileToWebpackAssets(filepath: string): Promise<string> {
+    private async addFileToWebpackAssets(filepath: string): Promise<ResolvedPath> {
         // filepath is not a glob. It was already Resolved
 
         // const filenameWithContext = path.resolve(compiler.options.context, filepath);
@@ -127,7 +130,8 @@ export class Asset {
                     size: () => stats.size
                 };
 
-                return resolvedPath;
+                const outputWebpackDir = this.compilation.compiler.options.output.path;
+                return { relative: resolvedPath, absolute: path.join(outputWebpackDir, resolvedPath) };
             });
     }
 

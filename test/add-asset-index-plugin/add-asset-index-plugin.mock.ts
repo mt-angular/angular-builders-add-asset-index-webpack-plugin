@@ -1,8 +1,11 @@
-import  path from 'path';
+import path from 'path';
 import { AssetOption } from '../../src/asset';
-import { BuilderParameters, AddAssetIndexPlugin, BuilderParametersOptions } from '../../src/add-asset-index-plugin';
+import { AddAssetIndexPlugin, BuilderParametersNeeded } from '../../src/add-asset-index-plugin';
 import { AddAssetIndexPluginPrivate } from './add-asset-index-plugin.private';
-import { isDefined, isArray, assignRecursive, PartialRecursive } from '@upradata/browser-util';
+import { isDefined, isArray, assignRecursive, PartialRecursive, assignRecursiveArray } from '@upradata/browser-util';
+import { BuilderParameters, CustomWebpackBuildSchema, CustomWebpackBrowserSchema } from '@ud-angular-builders/custom-webpack';
+import { BuilderContext } from '@angular-devkit/architect';
+import { Transforms } from '@ud-angular-builders/custom-webpack/dist/transforms';
 
 
 export interface CreateOptionParam<T> {
@@ -11,21 +14,36 @@ export interface CreateOptionParam<T> {
 }
 
 
-export const root = '/path/to/root';
-export const defaultAssetOption: AssetOption = { filepath: 'assets/font/**/*.woff2' };
-export const defaultBuilderOption: Partial<BuilderParameters> = {
-    buildOptions: {
-        index: path.join(root, 'src/index.html'),
+export const workspaceRoot = '/path/to/root';
+export const builderContext = { workspaceRoot } as BuilderContext;
+export const buildOptions = (): CustomWebpackBuildSchema => {
+
+    const buildO: CustomWebpackBuildSchema = {
+        index: path.join(workspaceRoot, 'src/index.html'),
         subresourceIntegrity: false,
         baseHref: undefined as string,
         deployUrl: undefined as string,
         place: 'head',
         hash: false
-    },
-    baseWebpackConfig: {
-        mode: 'development'
-    }
+    } as any;
+
+    // indexTransforms.options.indexTransforms === indexTransforms === buildOptions.indexTransforms;
+    const indexTransforms = new Transforms(buildO, builderContext);
+
+    return buildO;
 };
+
+export const defaultAssetOption: AssetOption = { filepath: 'assets/font/**/*.woff2' };
+
+export const defaultBuilderOption = (): Partial<BuilderParameters> => {
+    return {
+        builderContext,
+        buildOptions: buildOptions(),
+        baseWebpackConfig: {
+            mode: 'development'
+        }
+    };
+}
 
 
 export function createAddAssetIndexPlugin(
@@ -47,11 +65,11 @@ export function createAddAssetIndexPlugin(
         ) as AssetOption;
     }
 
-    const builderParametersO = assignRecursive(
-        { root },
-        !builderParameters || !builderParameters.noDefault ? defaultBuilderOption : {},
+    const builderParametersO = assignRecursiveArray({ builderContext }, [
+        !builderParameters || !builderParameters.noDefault ? defaultBuilderOption() : {},
         builderParameters ? builderParameters.param : {}
-    ) as BuilderParameters;
+    ], { depth: 2 } // defaultBuilderOption.buildOptions.indexTransform; is cyclic
+    ) as BuilderParametersNeeded;
 
     return new AddAssetIndexPlugin(assetsO, builderParametersO) as any;
 }

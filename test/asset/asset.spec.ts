@@ -1,4 +1,4 @@
-import  path from 'path';
+import path from 'path';
 import { assignRecursive, ExecuteOnTempState } from '@upradata/browser-util';
 import { WebpackCompilationMock } from '../index-writer/webpack-compilation.mock';
 import { AssetOption, Asset } from '../../src/asset';
@@ -26,7 +26,7 @@ function createAsset(root: string = __dirname, option?: Partial<AssetOption>, no
 }
 
 
-describe('Test suite for Asset', () => {
+describe.only('Test suite for Asset', () => {
     test('Asset constructor should set the option field', () => {
         const root = '/a/b/c';
         const option: AssetOption = {
@@ -156,7 +156,7 @@ describe('Test suite for Asset', () => {
 
                 const filepath = 'rel/path/image.png';
                 const resolvedPath = await asset.addFileToWebpackAssets(filepath);
-                expect(resolvedPath).toBe(filepath);
+                expect(resolvedPath.relative).toBe(filepath);
             });
         });
 
@@ -168,7 +168,7 @@ describe('Test suite for Asset', () => {
                 const filepath = path.join('/path/to/root', fileRelativeToRoot);
                 const resolvedPath = await asset.addFileToWebpackAssets(filepath);
 
-                expect(resolvedPath).toBe(fileRelativeToRoot);
+                expect(resolvedPath.relative).toBe(fileRelativeToRoot);
             });
         });
 
@@ -180,7 +180,7 @@ describe('Test suite for Asset', () => {
                 const fileRelativeToDeploy = 'rel/path/image.png';
                 const resolvedPath = await asset.addFileToWebpackAssets(fileRelativeToDeploy);
 
-                expect(resolvedPath).toBe(path.join(deployUrl, fileRelativeToDeploy));
+                expect(resolvedPath.relative).toBe(path.join(deployUrl, fileRelativeToDeploy));
             });
         });
 
@@ -193,7 +193,7 @@ describe('Test suite for Asset', () => {
                 const resolvedPath = await asset.addFileToWebpackAssets(fileRelativeToDeploy);
                 const hash = asset.getSourceHash(assetBuffer);
 
-                expect(resolvedPath).toBe(path.join(deployUrl, path.dirname(fileRelativeToDeploy), `image.${hash}.png`));
+                expect(resolvedPath.relative).toBe(path.join(deployUrl, path.dirname(fileRelativeToDeploy), `image.${hash}.png`));
             });
         });
     });

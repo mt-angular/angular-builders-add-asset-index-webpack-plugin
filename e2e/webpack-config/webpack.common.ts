@@ -26,7 +26,8 @@ export function commonWebpackConfiguration(option: { mode: Mode }): WebpackConfi
             new CleanWebpackPlugin({
                 cleanOnceBeforeBuildPatterns: [ dist(option.mode) ],
                 verbose: true,
-                dangerouslyAllowCleanPatternsOutsideProject: true
+                dangerouslyAllowCleanPatternsOutsideProject: true,
+                dry: false
             }),
             new HtmlWebpackPlugin({
                 template: path.join(root, 'src/index.html'),

@@ -1,23 +1,26 @@
 import { AssetResolved } from '../../src/add-asset-index-plugin';
+import { LocationInIndex } from '../../src/asset';
 
 
 export function assetResolved(option?: { sri?: boolean }) {
     const { sri, place } = Object.assign({ sri: false, place: 'head' }, option);
 
     const asset: AssetResolved = {
-        resolvedPath: 'asset/font.123456.woff2',
+        resolvedPath: {
+            relative: 'asset/font.123456.woff2',
+            absolute: '/root/dist/asset/font.123456.woff2'
+        },
         asset: {
-            option: {
-                place,
-                sri,
-                attributes: {
-                    rel: 'preload',
-                    as: 'font',
-                    crossorigin: true
-                }
-            }
+            place: place as LocationInIndex,
+            sri,
+            attributes: {
+                rel: 'preload',
+                as: 'font',
+                crossorigin: true
+            },
+            filepath: ''
         }
-    } as any;
+    };
 
 
     const linkAttrs = [
@@ -33,34 +36,38 @@ export function assetResolved(option?: { sri?: boolean }) {
 export function assetsResolved() {
     const assets: AssetResolved[] = [
         {
-            resolvedPath: 'asset/font.123456.woff2',
+            resolvedPath: {
+                relative: 'asset/font.123456.woff2',
+                absolute: '/root/dist/asset/font.123456.woff2'
+            },
             asset: {
-                option: {
-                    place: 'head',
-                    sri: false,
-                    attributes: {
-                        rel: 'preload',
-                        as: 'font',
-                        crossorigin: true
-                    }
-                }
+                place: 'head',
+                sri: false,
+                attributes: {
+                    rel: 'preload',
+                    as: 'font',
+                    crossorigin: true
+                },
+                filepath: ''
             }
         },
         {
-            resolvedPath: 'asset/img.abcdef.png',
+            resolvedPath: {
+                relative: 'asset/img.abcdef.png',
+                absolute: '/root/dist/asset/img.abcdef.png'
+            },
             asset: {
-                option: {
-                    place: 'head',
-                    sri: false,
-                    attributes: {
-                        rel: 'prefetch',
-                        as: 'image',
-                        crossorigin: true
-                    }
-                }
+                place: 'head',
+                sri: false,
+                attributes: {
+                    rel: 'prefetch',
+                    as: 'image',
+                    crossorigin: true
+                },
+                filepath: ''
             }
         }
-    ] as any;
+    ];
 
     const indexSourceReplacements = [
         '<link href="asset/font.123456.woff2" rel="preload" as="font" crossorigin>',

@@ -16,4 +16,4 @@ export const indexHtmlMock = `<!doctype html>
     <app-root class="test"></app-root>
 </body>
 
-</html>`
+</html>`;
